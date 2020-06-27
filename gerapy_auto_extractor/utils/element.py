@@ -195,12 +195,4 @@ def fill_element_info(element_info: ElementInfo):
     # fill density
     element_info.density_of_text = density_of_text(element_info)
     element_info.density_of_punctuation = density_of_punctuation(element_info)
-    
-    print('element fffff', element_info)
-    print('=' * 20)
     return element_info
-
-
-if __name__ == '__main__':
-    t = html2element('<a>dsdsjfkjsd年底红啊，但是军事基地分，是打发时间《第三方的身份》水电费水电费舒服的</a>')
-    print(number_of_punctuation(t))

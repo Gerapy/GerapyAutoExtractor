@@ -1,11 +1,15 @@
 import re
 from dateparser import parse
 from lxml.html import HtmlElement
-from patterns.datetime import METAS, REGEXES
+from gerapy_auto_extractor.patterns.datetime import METAS, REGEXES
 from loguru import logger
+from gerapy_auto_extractor.extractors.base import BaseExtractor
 
 
-class DatetimeExtractor(object):
+class DatetimeExtractor(BaseExtractor):
+    """
+    Datetime Extractor which auto extract datetime info.
+    """
     
     def extract_by_regex(self, element: HtmlElement) -> str:
         """
@@ -30,14 +34,14 @@ class DatetimeExtractor(object):
             if datetime:
                 return ''.join(datetime)
     
-    def extract(self, html):
+    def process(self, element: HtmlElement):
         """
         extract datetime
         :param html:
         :return:
         """
-        return self.extract_by_meta(html) or \
-               self.extract_by_regex(html)
+        return self.extract_by_meta(element) or \
+               self.extract_by_regex(element)
 
 
 datetime_extractor = DatetimeExtractor()

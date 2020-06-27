@@ -23,7 +23,6 @@ def preprocess4content(element: HtmlElement):
     etree.strip_elements(element, *CONTENT_USELESS_TAGS)
     # only move tag pair
     etree.strip_tags(element, *CONTENT_STRIP_TAGS)
-    print('---------')
     for child in children(element):
         
         # merge text in span or strong to parent p tag
