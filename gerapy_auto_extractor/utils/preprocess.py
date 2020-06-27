@@ -1,6 +1,6 @@
 from lxml.html import HtmlElement, etree
 
-from gerapy_auto_extractor.utils.element import children, remove_element
+from gerapy_auto_extractor.utils.element import children, remove_element, remove_children
 
 CONTENT_USELESS_TAGS = ['meta', 'style', 'script', 'link', 'video', 'audio', 'iframe', 'source', 'svg', 'path',
                         'symbol', 'img']
@@ -23,6 +23,9 @@ def preprocess4content(element: HtmlElement):
     etree.strip_elements(element, *CONTENT_USELESS_TAGS)
     # only move tag pair
     etree.strip_tags(element, *CONTENT_STRIP_TAGS)
+    
+    remove_children(element, CONTENT_NOISE_XPATHS)
+    
     for child in children(element):
         
         # merge text in span or strong to parent p tag
