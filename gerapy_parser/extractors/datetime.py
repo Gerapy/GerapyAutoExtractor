@@ -1,0 +1,67 @@
+import re
+from dateparser import parse
+from lxml.html import HtmlElement
+from patterns.datetime import METAS, REGEXES
+from loguru import logger
+
+
+class DatetimeExtractor(object):
+    
+    def extract_by_regex(self, element: HtmlElement) -> str:
+        """
+        extract datetime according to predefined regex
+        :param element:
+        :return:
+        """
+        text = ''.join(element.xpath('.//text()'))
+        for regex in REGEXES:
+            result = re.search(regex, text)
+            if result:
+                return result.group(1)
+    
+    def extract_by_meta(self, element: HtmlElement) -> str:
+        """
+        extract according to meta
+        :param element:
+        :return: str
+        """
+        for xpath in METAS:
+            datetime = element.xpath(xpath)
+            if datetime:
+                return ''.join(datetime)
+    
+    def extract(self, html):
+        """
+        extract datetime
+        :param html:
+        :return:
+        """
+        return self.extract_by_meta(html) or \
+               self.extract_by_regex(html)
+
+
+datetime_extractor = DatetimeExtractor()
+
+
+def parse_datetime(datetime):
+    """
+    parse datetime using dateparser lib
+    :param datetime:
+    :return:
+    """
+    try:
+        return parse(datetime)
+    except TypeError:
+        logger.exception(f'Error Occurred while parsing datetime extracted. datetime is {datetime}')
+
+
+def extract_datetime(html, parse=True):
+    """
+    extract datetime from html
+    :param html:
+    :return:
+    """
+    result = datetime_extractor.extract(html)
+    if not parse:
+        return result
+    return parse_datetime(result)
