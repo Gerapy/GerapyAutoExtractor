@@ -1,8 +1,35 @@
 from lxml.html import fromstring, HtmlElement
-from gerapy_parser.schemas.element import ElementInfo
+from gerapy_auto_extractor.schemas.element import ElementInfo
 import re
 
 PUNCTUATION = set('''！，。？、；：“”‘’《》%（）<>{}「」【】*～`,.?:;'"!%()''')
+
+
+def remove_element(element: HtmlElement):
+    """
+    remove child element from parent
+    :param element:
+    :return:
+    """
+    parent = element.getparent()
+    if parent is not None:
+        parent.remove(element)
+
+
+def remove_children(element: HtmlElement, xpaths=None):
+    """
+    remove children from element
+    :param element:
+    :param xpaths:
+    :return:
+    """
+    if not xpaths:
+        return
+    for xpath in xpaths:
+        nodes = element.xpath(xpath)
+        for node in nodes:
+            remove_element(node)
+    return element
 
 
 def html2element(html: str) -> HtmlElement:
@@ -90,7 +117,7 @@ def number_of_p_tag(element: HtmlElement):
     :param element:
     :return:
     """
-    return len(element.xpath('//p'))
+    return len(element.xpath('.//p'))
 
 
 def number_of_linked_tag(element: HtmlElement):
@@ -131,7 +158,6 @@ def density_of_punctuation(element_info: ElementInfo):
              (element_info.number_of_punctuation + 1)
     # result should not be zero
     return result or 1
-
 
 
 def number_of_punctuation(element: HtmlElement):

@@ -3,11 +3,11 @@ import numpy as np
 from lxml.html import etree, HtmlElement
 from html import unescape
 
-from gerapy_parser.utils.preprocess import preprocess4content
+from gerapy_auto_extractor.utils.preprocess import preprocess4content
 from gne.utils import iter_node, pad_host_for_images, config, get_high_weight_keyword_pattern
-from gerapy_parser.extractors.base import BaseExtractor
-from gerapy_parser.utils.element import children, children_of_body, fill_element_info
-from gerapy_parser.schemas.element import ElementInfo
+from gerapy_auto_extractor.extractors.base import BaseExtractor
+from gerapy_auto_extractor.utils.element import children, children_of_body, fill_element_info
+from gerapy_auto_extractor.schemas.element import ElementInfo
 
 
 class ContentExtractor(BaseExtractor):
@@ -59,17 +59,13 @@ class ContentExtractor(BaseExtractor):
             
             print('element_info', element_info)
         
+        # sort element info by
         element_infos = sorted(element_infos, key=lambda x: x.density_score, reverse=True)
-        print('len', element_infos)
-        
-        count = 0
-        for element_info in element_infos:
-            print('element_info', element_info)
-            print('element_info', ''.join(element_info.element.xpath('//text()')))
-            print('=======')
-            count += 1
-            if count > 5:
-                break
+        element_info_first = element_infos[0] if element_infos else None
+        if not element_info_first:
+            return None
+        text = '\n'.join(element_info_first.element.xpath('.//p//text()'))
+        print('text', text)
 
 
 content_extractor = ContentExtractor()
