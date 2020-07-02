@@ -11,18 +11,22 @@ def remove_element(element: HtmlElement):
     :param element:
     :return:
     """
+    if element is None:
+        return
     parent = element.getparent()
     if parent is not None:
         parent.remove(element)
 
 
-def remove_children(element: HtmlElement, xpaths=None):
+def remove_children(element: HtmlElement, xpaths):
     """
     remove children from element
     :param element:
     :param xpaths:
     :return:
     """
+    if element is None:
+        return
     if not xpaths:
         return
     for xpath in xpaths:
@@ -32,26 +36,91 @@ def remove_children(element: HtmlElement, xpaths=None):
     return element
 
 
-def html2element(html: str) -> HtmlElement:
+def html2element(html: str):
     """
     convert html to HtmlElement
     :param html:
     :return:
     """
+    if not html:
+        return None
     element = fromstring(html)
     return element
 
 
-def children(element: HtmlElement):
+def parent(element: HtmlElement):
     """
-    get children clement of specific element
-    :param element: parent element
+    get parent of element
+    :param element:
     :return:
     """
-    yield element
-    for child_element in element:
-        if isinstance(child_element, HtmlElement):
-            yield from children(child_element)
+    if element is None:
+        return None
+    return element.getparent()
+
+
+def children(element: HtmlElement, including=False):
+    """
+    get children
+    :param element:
+    :param including:
+    :return:
+    """
+    if element is None:
+        return []
+    if including:
+        yield element
+    for child in element.iterchildren():
+        if isinstance(child, HtmlElement):
+            yield child
+
+
+def siblings(element: HtmlElement, including=False):
+    """
+    get siblings of element
+    :param element:
+    :param including: include current element or not
+    :return:
+    """
+    if element is None:
+        return []
+    if including:
+        yield element
+    for sibling in element.itersiblings():
+        if isinstance(sibling, HtmlElement):
+            yield sibling
+
+
+def descendants(element: HtmlElement, including=False):
+    """
+    get descendants clement of specific element
+    :param element: parent element
+    :param including: including current element or not
+    :return:
+    """
+    if element is None:
+        return []
+    if including:
+        yield element
+    for descendant in element.iterdescendants():
+        if isinstance(descendant, HtmlElement):
+            yield descendant
+
+
+def alias(element: HtmlElement):
+    """
+    get alias of element, concat tag and attribs
+    :param element:
+    :return:
+    """
+    if element is None:
+        return ''
+    tag = element.tag
+    attribs = [tag]
+    for k, v in element.attrib.items():
+        k, v = re.sub(r'\s*', '', k), re.sub(r'\s*', '', v)
+        attribs.append(f'{k}={v}')
+    return '#'.join(attribs)
 
 
 def children_of_head(element: HtmlElement):
@@ -60,23 +129,27 @@ def children_of_head(element: HtmlElement):
     :param element:
     :return:
     """
+    if element is None:
+        return []
     body_xpath = '//head'
     body_element = element.xpath(body_xpath)
     if body_element:
-        return children(body_element)
+        return descendants(body_element, True)
     return []
 
 
-def children_of_body(element: HtmlElement):
+def descendants_of_body(element: HtmlElement):
     """
-    get children element of body element
+    get descendants element of body element
     :param element:
     :return:
     """
+    if element is None:
+        return []
     body_xpath = '//body'
     elements = element.xpath(body_xpath)
     if elements:
-        return children(elements[0])
+        return descendants(elements[0], True)
     return []
 
 
@@ -86,6 +159,8 @@ def number_of_char(element: HtmlElement):
     :param element:
     :return: length
     """
+    if element is None:
+        return 0
     text = ''.join(element.xpath('.//text()'))
     text = re.sub(r'\s*', '', text, flags=re.S)
     return len(text)
@@ -97,6 +172,8 @@ def number_of_linked_char(element: HtmlElement):
     :param element:
     :return: length
     """
+    if element is None:
+        return 0
     text = ''.join(element.xpath('.//a//text()'))
     text = re.sub(r'\s*', '', text, flags=re.S)
     return len(text)
@@ -108,6 +185,8 @@ def number_of_tag(element: HtmlElement):
     :param element:
     :return:
     """
+    if element is None:
+        return 0
     return len(element.xpath('.//*'))
 
 
@@ -117,6 +196,8 @@ def number_of_p_tag(element: HtmlElement):
     :param element:
     :return:
     """
+    if element is None:
+        return 0
     return len(element.xpath('.//p'))
 
 
@@ -126,38 +207,9 @@ def number_of_linked_tag(element: HtmlElement):
     :param element:
     :return:
     """
-    return len(element.xpath('.//a'))
-
-
-def density_of_text(element_info: ElementInfo):
-    """
-    get density of text, using:
-               number_of_char - number_of_linked_char
-    result = ------------------------------------------
-               number_of_tags - number_of_linked_tags
-    :param element_info:
-    :return:
-    """
-    # if denominator is 0, just return 0
-    if element_info.number_of_tag - element_info.number_of_linked_tag == 0:
+    if element is None:
         return 0
-    return (element_info.number_of_char - element_info.number_of_linked_char) / \
-           (element_info.number_of_tag - element_info.number_of_linked_tag)
-
-
-def density_of_punctuation(element_info: ElementInfo):
-    """
-    get density of punctuation, using
-                number_of_char - number_of_linked_char
-    result = -----------------------------------------
-                 number_of_punctuation + 1
-    :param element_info:
-    :return:
-    """
-    result = (element_info.number_of_char - element_info.number_of_linked_char) / \
-             (element_info.number_of_punctuation + 1)
-    # result should not be zero
-    return result or 1
+    return len(element.xpath('.//a'))
 
 
 def number_of_punctuation(element: HtmlElement):
@@ -166,33 +218,31 @@ def number_of_punctuation(element: HtmlElement):
     :param element:
     :return:
     """
+    if element is None:
+        return 0
     text = ''.join(element.xpath('.//text()'))
     text = re.sub(r'\s*', '', text, flags=re.S)
     punctuations = [c for c in text if c in PUNCTUATION]
     return len(punctuations)
 
 
-def fill_element_info(element_info: ElementInfo):
+def number_of_descendants(element: HtmlElement):
     """
-    calculate info of this element, for example, number of char
-    :param element_info:
+    get number of descendants
+    :param element:
     :return:
     """
-    element = element_info.element
-    
-    # fill id
-    element_info.id = hash(element)
-    element_info.tag_name = element.tag
-    
-    # fill number_of_char
-    element_info.number_of_char = number_of_char(element)
-    element_info.number_of_linked_char = number_of_linked_char(element)
-    element_info.number_of_tag = number_of_tag(element)
-    element_info.number_of_linked_tag = number_of_linked_tag(element)
-    element_info.number_of_p_tag = number_of_p_tag(element)
-    element_info.number_of_punctuation = number_of_punctuation(element)
-    
-    # fill density
-    element_info.density_of_text = density_of_text(element_info)
-    element_info.density_of_punctuation = density_of_punctuation(element_info)
-    return element_info
+    if element is None:
+        return 0
+    return len(list(descendants(element, including=False)))
+
+
+def number_of_children(element: HtmlElement):
+    """
+    get number of children
+    :param element:
+    :return:
+    """
+    if element is None:
+        return 0
+    return len(list(children(element)))

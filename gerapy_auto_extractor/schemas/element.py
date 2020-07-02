@@ -2,25 +2,41 @@ from lxml.html import HtmlElement
 from pydantic import BaseModel
 
 
-
-
-
 class ElementInfo(BaseModel):
     id: int = None
+    alias: str = None
     tag_name: str = None
     element: HtmlElement = None
-    number_of_char: int = 0
-    number_of_linked_char: int = 0
-    number_of_tag: int = 0
-    number_of_linked_tag: int = 0
-    number_of_p_tag: int = 0
-    number_of_punctuation: int = 0
-    density_of_punctuation: int = 1
-    density_of_text: int = 0
-    density_score: int = 0
-    
-    
+    parent_id: int = None
+    number_of_char: int = None
+    number_of_linked_char: int = None
+    number_of_tag: int = None
+    number_of_linked_tag: int = None
+    number_of_p_tag: int = None
+    number_of_punctuation: int = None
+    number_of_children: int = None
+    number_of_descendants: int = None
+    density_of_punctuation: int = None
+    density_of_text: float = None
+    density_score: float = None
+    similarity_with_siblings: float = None
     
     class Config:
         arbitrary_types_allowed = True
+
+
+class Element(HtmlElement):
+    dist = None
     
+    @classmethod
+    def from_parent(cls, parent):
+        return cls(**parent.__dict__)
+    
+    def __init__(self, *args, **kwargs):
+        # Here we override the constructor method
+        # and pass all the arguments to the parent __init__()
+        
+        super().__init__(*args, **kwargs)
+
+
+

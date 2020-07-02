@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
 from lxml.html import HtmlElement
+from collections import defaultdict
+from gerapy_auto_extractor.utils.element_info import similarity_with_siblings
 from gerapy_auto_extractor.utils.preprocess import preprocess4list
 from gerapy_auto_extractor.extractors.base import BaseExtractor
-from gerapy_auto_extractor.utils.element import children_of_body, fill_element_info
+from gerapy_auto_extractor.utils.element import descendants_of_body, alias, number_of_descendants, parent
 from gerapy_auto_extractor.schemas.element import ElementInfo
 
 
@@ -23,46 +25,25 @@ class ListExtractor(BaseExtractor):
         
         # start to evaluate every child element
         element_infos = []
-        child_elements = children_of_body(element)
-        for child_element in child_elements:
+        element_infos_tree = defaultdict(list)
+        descendants = descendants_of_body(element)
+        
+        for descendant in descendants:
             # new element info
             element_info = ElementInfo()
-            element_info.element = child_element
-            element_info = fill_element_info(element_info)
+            element_info.element = descendant
+            
+            element_info.similarity_with_siblings = similarity_with_siblings(element_info)
+            element_info.number_of_descendants = number_of_descendants(element_info.element)
+            element_info.parent_id = hash(parent(element_info.element))
+            print('similarity_with_siblings', element_info.similarity_with_siblings)
+            print('number_of_descendants', element_info.number_of_descendants)
+            print('alias', element_info.alias)
+            print('parent_id', element_info.parent_id)
+            print('=' * 20)
             element_infos.append(element_info)
-        
-        # get std of density_of_text among all elements
-        density_of_text = [element_info.density_of_text for element_info in element_infos]
-        density_of_text_std = np.std(density_of_text, ddof=1)
-        
-        # get density_score of every element
-        for element_info in element_infos:
-            score = np.log(density_of_text_std) * \
-                    element_info.density_of_text * \
-                    np.log10(element_info.number_of_p_tag + 2) * \
-                    np.log(element_info.density_of_punctuation)
-            element_info.density_score = score
-        
-        # sort element info by density_score
-        element_infos = sorted(element_infos, key=lambda x: x.density_score, reverse=True)
-        result = []
-        
-        for element_info in element_infos:
-            result.append({
-                'html': self.to_string(element_info.element, 100),
-                'density_score': element_info.density_score,
-                'density_of_text': element_info.density_of_text,
-                'number_of_char': element_info.number_of_char,
-                'number_of_linked_char': element_info.number_of_linked_char,
-                'number_of_tag': element_info.number_of_tag,
-                'number_of_linked_tag': element_info.number_of_linked_tag,
-                'number_of_p_tag': element_info.number_of_p_tag,
-                'number_of_punctuation': element_info.number_of_punctuation,
-                'density_of_punctuation': element_info.density_of_punctuation,
-            })
-        df = pd.DataFrame(result)
-        df.to_csv('result.csv')
-        df.to_excel('result.xlsx')
+            # collect tree
+            element_infos_tree[element_info.parent_id].append(element_info)
 
 
 list_extractor = ListExtractor()

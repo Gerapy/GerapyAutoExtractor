@@ -1,8 +1,10 @@
 import numpy as np
 from lxml.html import HtmlElement
+
+from gerapy_auto_extractor.utils.element_info import fill_element_info
 from gerapy_auto_extractor.utils.preprocess import preprocess4content
 from gerapy_auto_extractor.extractors.base import BaseExtractor
-from gerapy_auto_extractor.utils.element import children_of_body, fill_element_info
+from gerapy_auto_extractor.utils.element import descendants_of_body
 from gerapy_auto_extractor.schemas.element import ElementInfo
 
 
@@ -22,11 +24,11 @@ class ContentExtractor(BaseExtractor):
         
         # start to evaluate every child element
         element_infos = []
-        child_elements = children_of_body(element)
-        for child_element in child_elements:
+        descendants = descendants_of_body(element)
+        for descendant in descendants:
             # new element info
             element_info = ElementInfo()
-            element_info.element = child_element
+            element_info.element = descendant
             element_info = fill_element_info(element_info)
             element_infos.append(element_info)
         
