@@ -1,11 +1,14 @@
 from lxml.html import fromstring, HtmlElement
-from gerapy_auto_extractor.schemas.element import ElementInfo
+from numpy import mean
+from gerapy_auto_extractor.schemas.element import Element
 import re
+
+from gerapy_auto_extractor.utils.similarity import similarity
 
 PUNCTUATION = set('''！，。？、；：“”‘’《》%（）<>{}「」【】*～`,.?:;'"!%()''')
 
 
-def remove_element(element: HtmlElement):
+def remove_element(element: Element):
     """
     remove child element from parent
     :param element:
@@ -18,7 +21,7 @@ def remove_element(element: HtmlElement):
         parent.remove(element)
 
 
-def remove_children(element: HtmlElement, xpaths):
+def remove_children(element: Element, xpaths):
     """
     remove children from element
     :param element:
@@ -45,10 +48,11 @@ def html2element(html: str):
     if not html:
         return None
     element = fromstring(html)
+    element.__class__ = Element
     return element
 
 
-def parent(element: HtmlElement):
+def parent(element: Element):
     """
     get parent of element
     :param element:
@@ -56,10 +60,12 @@ def parent(element: HtmlElement):
     """
     if element is None:
         return None
-    return element.getparent()
+    parent = element.getparent()
+    parent.__class__ = Element
+    return parent
 
 
-def children(element: HtmlElement, including=False):
+def children(element: Element, including=False):
     """
     get children
     :param element:
@@ -72,10 +78,11 @@ def children(element: HtmlElement, including=False):
         yield element
     for child in element.iterchildren():
         if isinstance(child, HtmlElement):
+            child.__class__ = Element
             yield child
 
 
-def siblings(element: HtmlElement, including=False):
+def siblings(element: Element, including=False):
     """
     get siblings of element
     :param element:
@@ -88,10 +95,11 @@ def siblings(element: HtmlElement, including=False):
         yield element
     for sibling in element.itersiblings():
         if isinstance(sibling, HtmlElement):
+            sibling.__class__ = Element
             yield sibling
 
 
-def descendants(element: HtmlElement, including=False):
+def descendants(element: Element, including=False):
     """
     get descendants clement of specific element
     :param element: parent element
@@ -104,10 +112,11 @@ def descendants(element: HtmlElement, including=False):
         yield element
     for descendant in element.iterdescendants():
         if isinstance(descendant, HtmlElement):
+            descendant.__class__ = Element
             yield descendant
 
 
-def alias(element: HtmlElement):
+def alias(element: Element):
     """
     get alias of element, concat tag and attribs
     :param element:
@@ -123,7 +132,7 @@ def alias(element: HtmlElement):
     return '#'.join(attribs)
 
 
-def children_of_head(element: HtmlElement):
+def children_of_head(element: Element):
     """
     get children element of body element
     :param element:
@@ -134,11 +143,12 @@ def children_of_head(element: HtmlElement):
     body_xpath = '//head'
     body_element = element.xpath(body_xpath)
     if body_element:
+        body_element.__class__ = Element
         return descendants(body_element, True)
     return []
 
 
-def descendants_of_body(element: HtmlElement):
+def descendants_of_body(element: Element):
     """
     get descendants element of body element
     :param element:
@@ -149,11 +159,12 @@ def descendants_of_body(element: HtmlElement):
     body_xpath = '//body'
     elements = element.xpath(body_xpath)
     if elements:
-        return descendants(elements[0], True)
+        elements[0].__class__ = Element
+        return list(descendants(elements[0], True))
     return []
 
 
-def number_of_char(element: HtmlElement):
+def number_of_char(element: Element):
     """
     get number of char, for example, result of `<a href="#">hello</a>world` = 10
     :param element:
@@ -166,7 +177,7 @@ def number_of_char(element: HtmlElement):
     return len(text)
 
 
-def number_of_linked_char(element: HtmlElement):
+def number_of_linked_char(element: Element):
     """
     get number of linked char, for example, result of `<a href="#">hello</a>world` = 5
     :param element:
@@ -179,7 +190,7 @@ def number_of_linked_char(element: HtmlElement):
     return len(text)
 
 
-def number_of_tag(element: HtmlElement):
+def number_of_tag(element: Element):
     """
     get number of all tags in this element
     :param element:
@@ -190,7 +201,7 @@ def number_of_tag(element: HtmlElement):
     return len(element.xpath('.//*'))
 
 
-def number_of_p_tag(element: HtmlElement):
+def number_of_p_tag(element: Element):
     """
     get number of p tags
     :param element:
@@ -201,7 +212,7 @@ def number_of_p_tag(element: HtmlElement):
     return len(element.xpath('.//p'))
 
 
-def number_of_linked_tag(element: HtmlElement):
+def number_of_linked_tag(element: Element):
     """
     get number of a tags in this element
     :param element:
@@ -212,7 +223,7 @@ def number_of_linked_tag(element: HtmlElement):
     return len(element.xpath('.//a'))
 
 
-def number_of_punctuation(element: HtmlElement):
+def number_of_punctuation(element: Element):
     """
     get number of punctuation of text in this element
     :param element:
@@ -226,7 +237,7 @@ def number_of_punctuation(element: HtmlElement):
     return len(punctuations)
 
 
-def number_of_descendants(element: HtmlElement):
+def number_of_descendants(element: Element):
     """
     get number of descendants
     :param element:
@@ -237,7 +248,7 @@ def number_of_descendants(element: HtmlElement):
     return len(list(descendants(element, including=False)))
 
 
-def number_of_children(element: HtmlElement):
+def number_of_children(element: Element):
     """
     get number of children
     :param element:
@@ -246,3 +257,98 @@ def number_of_children(element: HtmlElement):
     if element is None:
         return 0
     return len(list(children(element)))
+
+
+def density_of_text(element: Element):
+    """
+    get density of text, using:
+               number_of_char - number_of_linked_char
+    result = ------------------------------------------
+               number_of_tags - number_of_linked_tags
+    :param element_info:
+    :return:
+    """
+    if element.number_of_char is None:
+        element.number_of_char = number_of_char(element)
+    
+    if element.number_of_linked_char is None:
+        element.number_of_linked_char = number_of_linked_char(element)
+    
+    if element.number_of_tag is None:
+        element.number_of_tag = number_of_tag(element)
+    
+    if element.number_of_linked_tag is None:
+        element.number_of_linked_tag = number_of_linked_tag(element)
+    
+    # if denominator is 0, just return 0
+    if element.number_of_tag - element.number_of_linked_tag == 0:
+        return 0
+    return (element.number_of_char - element.number_of_linked_char) / \
+           (element.number_of_tag - element.number_of_linked_tag)
+
+
+def density_of_punctuation(element: Element):
+    """
+    get density of punctuation, using
+                number_of_char - number_of_linked_char
+    result = -----------------------------------------
+                 number_of_punctuation + 1
+    :param element:
+    :return:
+    """
+    if element.number_of_char is None:
+        element.number_of_char = number_of_char(element)
+    
+    if element.number_of_linked_char is None:
+        element.number_of_linked_char = number_of_linked_char(element)
+    
+    if element.number_of_punctuation is None:
+        element.number_of_punctuation = number_of_punctuation(element)
+    
+    result = (element.number_of_char - element.number_of_linked_char) / \
+             (element.number_of_punctuation + 1)
+    # result should not be zero
+    return result or 1
+
+
+def similarity_with_siblings(element: Element):
+    """
+    get similarity with siblings
+    :param element:
+    :return:
+    """
+    if not element.alias:
+        element.alias = alias(element)
+    scores = []
+    for sibling in siblings(element):
+        sibling_alias = alias(sibling)
+        scores.append(similarity(element.alias, sibling_alias))
+    if not scores:
+        return 0
+    return mean(scores)
+
+
+def fill_element_info(element: Element):
+    """
+    calculate info of this element, for example, number of char
+    :param element:
+    :return:
+    """
+    # element = element.element
+    
+    # fill id
+    element.id = hash(element)
+    element.tag_name = element.tag
+    
+    # fill number_of_char
+    element.number_of_char = number_of_char(element)
+    element.number_of_linked_char = number_of_linked_char(element)
+    element.number_of_tag = number_of_tag(element)
+    element.number_of_linked_tag = number_of_linked_tag(element)
+    element.number_of_p_tag = number_of_p_tag(element)
+    element.number_of_punctuation = number_of_punctuation(element)
+    
+    # fill density
+    element.density_of_text = density_of_text(element)
+    element.density_of_punctuation = density_of_punctuation(element)
+    return element

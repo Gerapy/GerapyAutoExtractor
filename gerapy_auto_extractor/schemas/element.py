@@ -1,8 +1,7 @@
 from lxml.html import HtmlElement
-from pydantic import BaseModel
 
 
-class ElementInfo(BaseModel):
+class Element(HtmlElement):
     id: int = None
     alias: str = None
     tag_name: str = None
@@ -20,23 +19,3 @@ class ElementInfo(BaseModel):
     density_of_text: float = None
     density_score: float = None
     similarity_with_siblings: float = None
-    
-    class Config:
-        arbitrary_types_allowed = True
-
-
-class Element(HtmlElement):
-    dist = None
-    
-    @classmethod
-    def from_parent(cls, parent):
-        return cls(**parent.__dict__)
-    
-    def __init__(self, *args, **kwargs):
-        # Here we override the constructor method
-        # and pass all the arguments to the parent __init__()
-        
-        super().__init__(*args, **kwargs)
-
-
-

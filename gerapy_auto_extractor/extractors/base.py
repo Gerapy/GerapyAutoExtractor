@@ -1,14 +1,14 @@
 from lxml.html import fromstring
 from loguru import logger
 from lxml.html import HtmlElement, etree
-
+from gerapy_auto_extractor.schemas.element import Element
 
 class BaseExtractor(object):
     """
     Base Extractor which provide common methods
     """
     
-    def to_string(self, element: HtmlElement, limit: int = None):
+    def to_string(self, element: Element, limit: int = None):
         """
         convert element to string
         :param element:
@@ -20,7 +20,7 @@ class BaseExtractor(object):
             return result[:limit]
         return result
     
-    def process(self, element: HtmlElement):
+    def process(self, element: Element):
         """
         process method that you should implement
         :param element:
@@ -37,4 +37,5 @@ class BaseExtractor(object):
         :return:
         """
         element = fromstring(html=html)
+        element.__class__ = Element
         return self.process(element)

@@ -1,5 +1,6 @@
 from lxml.html import HtmlElement, etree
 
+from gerapy_auto_extractor.schemas.element import Element
 from gerapy_auto_extractor.utils.element import children, remove_element, remove_children
 
 CONTENT_USELESS_TAGS = ['meta', 'style', 'script', 'link', 'video', 'audio', 'iframe', 'source', 'svg', 'path',
@@ -51,12 +52,13 @@ LIST_NOISE_XPATHS = [
     '//div[contains(@style, "display: none")]',
 ]
 
-def preprocess4list(element: HtmlElement):
+def preprocess4list(element: Element):
     """
     preprocess element for list extraction
     :param element:
     :return:
     """
+    print('pre', type(element))
     # remove tag and its content
     etree.strip_elements(element, *CONTENT_USELESS_TAGS)
     # only move tag pair

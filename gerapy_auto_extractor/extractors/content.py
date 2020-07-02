@@ -1,11 +1,9 @@
 import numpy as np
-from lxml.html import HtmlElement
-
-from gerapy_auto_extractor.utils.element_info import fill_element_info
+from gerapy_auto_extractor.schemas.element import Element
+from gerapy_auto_extractor.utils.element import fill_element_info
 from gerapy_auto_extractor.utils.preprocess import preprocess4content
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 from gerapy_auto_extractor.utils.element import descendants_of_body
-from gerapy_auto_extractor.schemas.element import ElementInfo
 
 
 class ContentExtractor(BaseExtractor):
@@ -13,7 +11,7 @@ class ContentExtractor(BaseExtractor):
     extract content from detail page
     """
     
-    def process(self, element: HtmlElement):
+    def process(self, element: Element):
         """
         extract content from html
         :param element:
@@ -26,30 +24,26 @@ class ContentExtractor(BaseExtractor):
         element_infos = []
         descendants = descendants_of_body(element)
         for descendant in descendants:
-            # new element info
-            element_info = ElementInfo()
-            element_info.element = descendant
-            element_info = fill_element_info(element_info)
-            element_infos.append(element_info)
+            fill_element_info(descendant)
         
         # get std of density_of_text among all elements
-        density_of_text = [element_info.density_of_text for element_info in element_infos]
+        density_of_text = [descendant.density_of_text for descendant in descendants]
         density_of_text_std = np.std(density_of_text, ddof=1)
         
         # get density_score of every element
-        for element_info in element_infos:
+        for descendant in descendants:
             score = np.log(density_of_text_std) * \
-                    element_info.density_of_text * \
-                    np.log10(element_info.number_of_p_tag + 2) * \
-                    np.log(element_info.density_of_punctuation)
-            element_info.density_score = score
+                    descendant.density_of_text * \
+                    np.log10(descendant.number_of_p_tag + 2) * \
+                    np.log(descendant.density_of_punctuation)
+            descendant.density_score = score
         
         # sort element info by density_score
-        element_infos = sorted(element_infos, key=lambda x: x.density_score, reverse=True)
-        element_info_first = element_infos[0] if element_infos else None
-        if not element_info_first:
+        descendants = sorted(descendants, key=lambda x: x.density_score, reverse=True)
+        descendant_first = descendants[0] if descendants else None
+        if descendant_first is None:
             return None
-        text = '\n'.join(element_info_first.element.xpath('.//p//text()'))
+        text = '\n'.join(descendant_first.xpath('.//p//text()'))
         return text
 
 
