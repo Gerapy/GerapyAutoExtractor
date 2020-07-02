@@ -1,12 +1,25 @@
 from lxml.html import fromstring
 from loguru import logger
-from lxml.html import HtmlElement
+from lxml.html import HtmlElement, etree
 
 
 class BaseExtractor(object):
     """
     Base Extractor which provide common methods
     """
+    
+    def to_string(self, element: HtmlElement, limit: int = None):
+        """
+        convert element to string
+        :param element:
+        :param limit:
+        :return:
+        """
+        result = etree.tostring(element, pretty_print=True, encoding="utf-8", method='html').decode('utf-8')
+        if limit:
+            return result[:limit]
+        return result
+    
     def process(self, element: HtmlElement):
         """
         process method that you should implement

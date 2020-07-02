@@ -23,10 +23,3 @@ def lcs_of_list(*args):
     first = args[0]
     remains = args[1:]
     return lcs_of_2(first, lcs_of_list(*remains))
-
-
-if __name__ == '__main__':
-    a = 'abcdef'
-    b = 'abbbbabcdeffff'
-    c = 'bcdefff'
-    print(lcs_of_list(a, b, c))
