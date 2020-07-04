@@ -1,4 +1,4 @@
-from gerapy_auto_extractor.utils.similarity import similarity1
+from gerapy_auto_extractor.utils.similarity import similarity
 from collections import defaultdict
 
 
@@ -14,7 +14,7 @@ def cluster(items, threshold=0.9):
     clusters = []
     for name in items:
         for c in clusters:
-            if all(similarity1(name, w) > threshold for w in c):
+            if all(similarity(name, w) > threshold for w in c):
                 c.append(name)
                 clusters_map[name] = number
                 break
