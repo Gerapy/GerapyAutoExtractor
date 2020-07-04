@@ -12,7 +12,7 @@ from gerapy_auto_extractor.utils.element import descendants_of_body, number_of_s
 from gerapy_auto_extractor.schemas.element import Element
 
 LIST_MIN_NUMBER = 5
-LIST_MIN_LENGTH = 12
+LIST_MIN_LENGTH = 8
 LIST_MAX_LENGTH = 35
 SIMILARITY_THRESHOLD = 0.8
 
@@ -91,26 +91,13 @@ class ListExtractor(BaseExtractor):
         print(clusters_score)
         best_cluster = clusters[clusters_score_arg_max]
         
-        # extends missed element using siblings
-        existed_elements_selectors = [element.selector for element in best_cluster]
-        print('existed_elements_selectors', existed_elements_selectors)
-        for element in best_cluster:
-            items = list(siblings(element))
-            print('len', len(items))
-            for item in items:
-                if item.selector not in existed_elements_selectors:
-                    print('item', item.alias)
-                    best_cluster.append(item)
-                    existed_elements_selectors.append(item.selector)
-        best_cluster = sorted(best_cluster, key=lambda x: x.selector)
-        
         # extract link from clusters
         result = []
         for element in best_cluster:
             descendants = element.linked_descendants
             for descendant in descendants:
                 descendant_text = text(descendant)
-                if not descendant_text or len(descendant_text) > self.max_length or len(
+                if not descendant_text or len(
                         descendant_text) < self.min_length:
                     continue
                 href = descendant.attrib.get('href')
