@@ -28,7 +28,6 @@ class Element(HtmlElement):
     _linked_descendants_group_text_min_length: float = None
     _linked_descendants_group_text_max_length: float = None
     
-    alias: str = None
     tag_name: str = None
     parent_id: int = None
     number_of_char: int = None
@@ -53,8 +52,20 @@ class Element(HtmlElement):
         """
         if self._id is not None:
             return self._id
-        self._id = id(self)
+        self._id = hash(self)
         return self._id
+
+    @property
+    def alias(self):
+        """
+        get id by hashed element
+        :return:
+        """
+        if self._alias is not None:
+            return self._alias
+        from gerapy_auto_extractor.utils.element import alias
+        self._alias = alias(self)
+        return self._alias
     
     @property
     def selector(self):
@@ -79,7 +90,7 @@ class Element(HtmlElement):
         from gerapy_auto_extractor.utils.element import selector, parent
         # TODO: change parent(self) to self.parent
         parent = parent(self)
-        if parent:
+        if parent is not None:
             self._parent_selector = selector(parent)
         return self._parent_selector
     

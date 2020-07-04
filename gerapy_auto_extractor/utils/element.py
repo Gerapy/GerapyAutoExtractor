@@ -64,9 +64,9 @@ def selector(element: Element):
     if element is None:
         return ''
     p = parent(element)
-    if p is not None and element is not None:
-        return selector(p) + '/' + alias(element)
-    return alias(element)
+    if p is not None:
+        return selector(p) + '/' + element.alias
+    return element.alias
 
 
 def tag_path(element: Element):
@@ -79,7 +79,7 @@ def tag_path(element: Element):
     if element is None:
         return ''
     p = parent(element)
-    if p is not None and element is not None:
+    if p is not None:
         return tag_path(p) + '/' + element.tag
     return element.tag
 
@@ -92,7 +92,11 @@ def linked_descendants(element: Element):
     """
     if element is None:
         return []
-    return list(element.xpath('.//a'))
+    descendants = []
+    for descendant in element.xpath('.//a'):
+        descendant.__class__ = Element
+        descendants.append(descendant)
+    return descendants
 
 
 def linked_descendants_group(element: Element):
@@ -103,8 +107,8 @@ def linked_descendants_group(element: Element):
     """
     result = defaultdict(list)
     for linked_descendant in element.linked_descendants:
-        _tag_path = tag_path(linked_descendant)
-        result[_tag_path].append(element)
+        _tag_path = linked_descendant.tag_path
+        result[_tag_path].append(linked_descendant)
     return result
 
 
@@ -396,19 +400,28 @@ def density_of_punctuation(element: Element):
     return result or 1
 
 
+def similarity_with_element(element1: Element, element2: Element):
+    """
+    get similarity between two elements
+    :param element1:
+    :param element2:
+    :return:
+    """
+    alias1 = element1.alias
+    alias2 = element2.alias
+    return similarity(alias1, alias2)
+
+
 def similarity_with_siblings(element: Element):
     """
     get similarity with siblings
     :param element:
     :return:
     """
-    if not element.alias:
-        element.alias = alias(element)
     scores = []
     for sibling in siblings(element):
-        sibling_alias = alias(sibling)
         # TODO: maybe compare all children not only alias
-        scores.append(similarity(element.alias, sibling_alias))
+        scores.append(similarity_with_element(element, sibling))
     if not scores:
         return 0
     return mean(scores)

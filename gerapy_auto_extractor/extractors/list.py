@@ -13,6 +13,7 @@ from gerapy_auto_extractor.schemas.element import Element
 LIST_MIN_NUMBER = 5
 LIST_MIN_LENGTH = 10
 LIST_MAX_LENGTH = 30
+SIMILARITY_THRESHOLD = 0.8
 
 
 class ListExtractor(BaseExtractor):
@@ -20,7 +21,8 @@ class ListExtractor(BaseExtractor):
     extract list from index page
     """
     
-    def __init__(self, min_number=LIST_MIN_NUMBER, min_length=LIST_MIN_LENGTH, max_length=LIST_MAX_LENGTH):
+    def __init__(self, min_number=LIST_MIN_NUMBER, min_length=LIST_MIN_LENGTH, max_length=LIST_MAX_LENGTH,
+                 similarity_threshold=SIMILARITY_THRESHOLD):
         """
         init list extractor
         """
@@ -28,6 +30,7 @@ class ListExtractor(BaseExtractor):
         self.min_number = min_number
         self.min_length = min_length
         self.max_length = max_length
+        self.similarity_threshold = similarity_threshold
     
     def process(self, element: Element):
         """
@@ -50,52 +53,41 @@ class ListExtractor(BaseExtractor):
             if descendant.number_of_siblings + 1 < self.min_number:
                 continue
             
-            print('linked_descendants_group_text_min_length', descendant.linked_descendants_group_text_min_length)
-            print('linked_descendants_group_text_max_length', descendant.linked_descendants_group_text_max_length)
-            
             if descendant.linked_descendants_group_text_min_length > self.max_length:
                 continue
             
             if descendant.linked_descendants_group_text_max_length < self.min_length:
                 continue
             
-            descendant.number_of_linked_tag = number_of_linked_tag(descendant)
-            print('number_of_linked_tag', descendant.number_of_linked_tag)
-            print('number_of_linked_tag', descendant.string)
-            
             descendant.similarity_with_siblings = similarity_with_siblings(descendant)
-            descendant.number_of_descendants = number_of_descendants(descendant)
-            # descendant.parent_id = hash(parent(descendant))
-            # collect candidate tree
+            if descendant.similarity_with_siblings < self.similarity_threshold:
+                continue
             descendants_tree[descendant.parent_selector].append(descendant)
         
-        print('descendants_tree', descendants_tree)
+        descendants_tree = dict(descendants_tree)
         
-        print('descendants_tree length', len(descendants_tree))
+        # cut tree, remove parent block
+        selectors = sorted(list(descendants_tree.keys()))
+        last_selector = None
+        for selector in selectors[::-1]:
+            # if later selector
+            if last_selector and selector and last_selector.startswith(selector):
+                del descendants_tree[selector]
+            last_selector = selector
+        
+        print(selectors)
+        print(len(list(descendants_tree.keys())))
         exit()
-        
-        for id, children in descendants_tree.items():
-            print('=' * 50)
-            print('id', id)
-            for child in children:
-                print('child stirng', re.sub(r'\s*', '', child.string), child.similarity_with_siblings,
-                      child.number_of_siblings)
-                print('*' * 5)
-        
-        for id, children in descendants_tree.items():
-            print(id)
-        
-        # cluster all candidate groups using their id
         
         clusters = cluster_dict(descendants_tree)
         
         print('clusters', clusters)
-        
+        exit()
         clusters_score = defaultdict(dict)
         for cluster_id, cluster in clusters.items():
             clusters_score[cluster_id]['avg_similarity_with_siblings'] = mean(
                 [element.similarity_with_siblings for element in cluster])
-            
+        
         print(clusters_score)
         
         exit()
