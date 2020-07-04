@@ -1,15 +1,13 @@
+import itertools
 import math
 import operator
-import re
 from loguru import logger
 import numpy as np
 from collections import defaultdict
-
 from gerapy_auto_extractor.utils.cluster import cluster_dict
-from gerapy_auto_extractor.utils.element import similarity_with_siblings
 from gerapy_auto_extractor.utils.preprocess import preprocess4list
 from gerapy_auto_extractor.extractors.base import BaseExtractor
-from gerapy_auto_extractor.utils.element import descendants_of_body, number_of_siblings, number_of_descendants, parent
+from gerapy_auto_extractor.utils.element import descendants_of_body
 from gerapy_auto_extractor.schemas.element import Element
 
 LIST_MIN_NUMBER = 5
@@ -89,18 +87,32 @@ class ListExtractor(BaseExtractor):
         :param clusters:
         :return:
         """
+        print('clusters', clusters)
         # choose best cluster using score
         clusters_score = defaultdict(dict)
         clusters_score_arg_max = 0
         clusters_score_max = -1
         for cluster_id, cluster in clusters.items():
+            # calculate avg_similarity_with_siblings
             clusters_score[cluster_id]['avg_similarity_with_siblings'] = np.mean(
                 [element.similarity_with_siblings for element in cluster])
+            # calculate number of elements
+            clusters_score[cluster_id]['number_of_elements'] = len(cluster)
+            # calculate probability of it contains title
+            clusters_score[cluster_id]['probability_of_title_with_length'] = np.mean([
+                self._probability_of_title_with_length(len(a_descendant.text)) \
+                for a_descendant in itertools.chain(*[element.a_descendants for element in cluster]) \
+                ])
             # TODO: add more quota to select best cluster
-            clusters_score[cluster_id]['clusters_score'] = clusters_score[cluster_id]['avg_similarity_with_siblings']
+            clusters_score[cluster_id]['clusters_score'] = \
+                clusters_score[cluster_id]['avg_similarity_with_siblings'] \
+                * np.log10(clusters_score[cluster_id]['number_of_elements'] + 1) \
+                # * clusters_score[cluster_id]['probability_of_title_with_length']
+            # get max score arg index
             if clusters_score[cluster_id]['clusters_score'] > clusters_score_max:
                 clusters_score_max = clusters_score[cluster_id]['clusters_score']
                 clusters_score_arg_max = cluster_id
+        logger.debug(f'clusters_score {clusters_score}')
         best_cluster = clusters[clusters_score_arg_max]
         return best_cluster
     
@@ -139,6 +151,8 @@ class ListExtractor(BaseExtractor):
                 href = descendant.attrib.get('href')
                 if not href:
                     continue
+                if href.startswith('//'):
+                    href = 'http:' + href
                 result.append({
                     'title': title,
                     'href': href

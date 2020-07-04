@@ -58,7 +58,6 @@ def preprocess4list(element: Element):
     :param element:
     :return:
     """
-    print('pre', type(element))
     # remove tag and its content
     etree.strip_elements(element, *CONTENT_USELESS_TAGS)
     # only move tag pair
