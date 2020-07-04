@@ -87,7 +87,6 @@ class ListExtractor(BaseExtractor):
         :param clusters:
         :return:
         """
-        print('clusters', clusters)
         # choose best cluster using score
         clusters_score = defaultdict(dict)
         clusters_score_arg_max = 0

@@ -41,13 +41,3 @@ def cluster_dict(data: dict):
         else:
             result[clusters_map[k]].append(v)
     return dict(result)
-
-
-if __name__ == '__main__':
-    combined_list = {
-        'dddddd': ['b', 'm'],
-        'ddddddd': 'c',
-        'dddddd0': 'd',
-        'eeeeeee': 'e'
-    }
-    print(cluster_dict(combined_list))
