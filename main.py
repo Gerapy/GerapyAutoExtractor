@@ -5,7 +5,8 @@ from gerapy_auto_extractor.schemas.element import Element
 from gerapy_auto_extractor.extractors.list import extract_list
 import json
 from os.path import join, dirname, abspath
-html = open(join(dirname(abspath(__file__)), 'samples/list/sample1.html'), encoding='utf-8').read()
+
+html = open(join(dirname(abspath(__file__)), 'samples/list/sample4.html'), encoding='utf-8').read()
 
 # with open('result.html', 'w', encoding='utf-8') as f:
 #     f.write(etree.tostring(element, pretty_print=True, encoding="utf-8", method='html').decode('utf-8'))
@@ -14,6 +15,7 @@ html = open(join(dirname(abspath(__file__)), 'samples/list/sample1.html'), encod
 # element = fromstring(html=html)
 #
 le = extract_list(html)
+print(json.dumps(le, indent=2, ensure_ascii=False, default=str))
 #
 # for element in element.iterchildren():
 #     print(element)

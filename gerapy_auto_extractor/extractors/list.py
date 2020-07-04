@@ -4,15 +4,16 @@ from numpy import mean
 from collections import defaultdict
 
 from gerapy_auto_extractor.utils.cluster import cluster_dict
-from gerapy_auto_extractor.utils.element import similarity_with_siblings, number_of_linked_tag, linked_descendants
+from gerapy_auto_extractor.utils.element import similarity_with_siblings, number_of_linked_tag, linked_descendants, \
+    text, siblings
 from gerapy_auto_extractor.utils.preprocess import preprocess4list
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 from gerapy_auto_extractor.utils.element import descendants_of_body, number_of_siblings, number_of_descendants, parent
 from gerapy_auto_extractor.schemas.element import Element
 
 LIST_MIN_NUMBER = 5
-LIST_MIN_LENGTH = 10
-LIST_MAX_LENGTH = 30
+LIST_MIN_LENGTH = 12
+LIST_MAX_LENGTH = 35
 SIMILARITY_THRESHOLD = 0.8
 
 
@@ -63,7 +64,6 @@ class ListExtractor(BaseExtractor):
             if descendant.similarity_with_siblings < self.similarity_threshold:
                 continue
             descendants_tree[descendant.parent_selector].append(descendant)
-        
         descendants_tree = dict(descendants_tree)
         
         # cut tree, remove parent block
@@ -74,50 +74,53 @@ class ListExtractor(BaseExtractor):
             if last_selector and selector and last_selector.startswith(selector):
                 del descendants_tree[selector]
             last_selector = selector
-        
-        print(selectors)
-        print(len(list(descendants_tree.keys())))
-        exit()
-        
         clusters = cluster_dict(descendants_tree)
         
-        print('clusters', clusters)
-        exit()
+        # choose best cluster using score
         clusters_score = defaultdict(dict)
+        clusters_score_arg_max = 0
+        clusters_score_max = -1
         for cluster_id, cluster in clusters.items():
             clusters_score[cluster_id]['avg_similarity_with_siblings'] = mean(
                 [element.similarity_with_siblings for element in cluster])
-        
+            # TODO: add more quota to select best cluster
+            clusters_score[cluster_id]['clusters_score'] = clusters_score[cluster_id]['avg_similarity_with_siblings']
+            if clusters_score[cluster_id]['clusters_score'] > clusters_score_max:
+                clusters_score_max = clusters_score[cluster_id]['clusters_score']
+                clusters_score_arg_max = cluster_id
         print(clusters_score)
+        best_cluster = clusters[clusters_score_arg_max]
         
-        exit()
-        # get max similarity_with_siblings
-        similarity_with_siblings_max = 0
-        similarity_with_siblings_max_parent_id = None
-        for id, children in descendants_tree.items():
-            similarity_with_siblings_list = []
-            for child in children:
-                similarity_with_siblings_list.append(child.similarity_with_siblings)
-            similarity_with_siblings_mean = mean(similarity_with_siblings_list)
-            if similarity_with_siblings_mean > similarity_with_siblings_max:
-                similarity_with_siblings_max = similarity_with_siblings_mean
-                similarity_with_siblings_max_parent_id = id
-        print('similarity_with_siblings_max', similarity_with_siblings_max)
-        print('similarity_with_siblings_max_parent_id', similarity_with_siblings_max_parent_id)
+        # extends missed element using siblings
+        existed_elements_selectors = [element.selector for element in best_cluster]
+        print('existed_elements_selectors', existed_elements_selectors)
+        for element in best_cluster:
+            items = list(siblings(element))
+            print('len', len(items))
+            for item in items:
+                if item.selector not in existed_elements_selectors:
+                    print('item', item.alias)
+                    best_cluster.append(item)
+                    existed_elements_selectors.append(item.selector)
+        best_cluster = sorted(best_cluster, key=lambda x: x.selector)
         
-        # print child
-        for child in descendants_tree[similarity_with_siblings_max_parent_id]:
-            print('similarity_with_siblings', child.similarity_with_siblings)
-            print('number_of_descendants', child.number_of_descendants)
-            print('child', child.similarity_with_siblings)
-            print('alias', child.alias)
-            print('string', child.string)
-            print('tag path', child.tag_path)
-            print('linked_descendants', child.linked_descendants)
-            print('linked_descendants', child.linked_descendants_group)
-            print('linked_descendants', child.linked_descendants_group_text_min_length)
-            print('linked_descendants', child.linked_descendants_group_text_max_length)
-        #
+        # extract link from clusters
+        result = []
+        for element in best_cluster:
+            descendants = element.linked_descendants
+            for descendant in descendants:
+                descendant_text = text(descendant)
+                if not descendant_text or len(descendant_text) > self.max_length or len(
+                        descendant_text) < self.min_length:
+                    continue
+                href = descendant.attrib.get('href')
+                if not href:
+                    continue
+                result.append({
+                    'title': descendant_text,
+                    'href': href
+                })
+        return result
 
 
 list_extractor = ListExtractor()
