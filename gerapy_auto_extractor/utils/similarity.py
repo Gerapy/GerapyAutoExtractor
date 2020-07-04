@@ -38,7 +38,7 @@ def similarity(s1, s2):
     :param s2:
     :return:
     """
-    return similarity2(s1, s2)
+    return similarity1(s1, s2)
 
 
 if __name__ == '__main__':

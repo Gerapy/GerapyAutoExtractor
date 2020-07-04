@@ -1,3 +1,5 @@
+from types import ModuleType
+from collections import defaultdict
 from lxml.html import fromstring, HtmlElement
 from numpy import mean
 from gerapy_auto_extractor.schemas.element import Element
@@ -52,6 +54,60 @@ def html2element(html: str):
     return element
 
 
+def selector(element: Element):
+    """
+    get id using recursive function.
+    for example result: html/body/div/div/ul/li
+    :param element:
+    :return:
+    """
+    if element is None:
+        return ''
+    p = parent(element)
+    if p is not None and element is not None:
+        return selector(p) + '/' + alias(element)
+    return alias(element)
+
+
+def tag_path(element: Element):
+    """
+    get tag path using recursive function.
+    for example result: html/body/div/div/ul/li
+    :param element:
+    :return:
+    """
+    if element is None:
+        return ''
+    p = parent(element)
+    if p is not None and element is not None:
+        return tag_path(p) + '/' + element.tag
+    return element.tag
+
+
+def linked_descendants(element: Element):
+    """
+    get
+    :param element:
+    :return:
+    """
+    if element is None:
+        return []
+    return list(element.xpath('.//a'))
+
+
+def linked_descendants_group(element: Element):
+    """
+    get linked descendants group
+    :param element:
+    :return:
+    """
+    result = defaultdict(list)
+    for linked_descendant in element.linked_descendants:
+        _tag_path = tag_path(linked_descendant)
+        result[_tag_path].append(element)
+    return result
+
+
 def parent(element: Element):
     """
     get parent of element
@@ -61,7 +117,8 @@ def parent(element: Element):
     if element is None:
         return None
     parent = element.getparent()
-    parent.__class__ = Element
+    if isinstance(parent, ModuleType):
+        parent.__class__ = Element
     return parent
 
 
@@ -93,7 +150,11 @@ def siblings(element: Element, including=False):
         return []
     if including:
         yield element
-    for sibling in element.itersiblings():
+    for sibling in element.itersiblings(preceding=True):
+        if isinstance(sibling, HtmlElement):
+            sibling.__class__ = Element
+            yield sibling
+    for sibling in element.itersiblings(preceding=False):
         if isinstance(sibling, HtmlElement):
             sibling.__class__ = Element
             yield sibling
@@ -129,7 +190,11 @@ def alias(element: Element):
     for k, v in element.attrib.items():
         k, v = re.sub(r'\s*', '', k), re.sub(r'\s*', '', v)
         attribs.append(f'{k}={v}')
-    return '#'.join(attribs)
+    result = '&'.join(attribs)
+    # get nth-child
+    nth = len(list(element.itersiblings(preceding=True))) + 1
+    result += f'::index({nth})' if nth != 1 else ''
+    return result
 
 
 def children_of_head(element: Element):
@@ -164,17 +229,26 @@ def descendants_of_body(element: Element):
     return []
 
 
+def text(element: Element):
+    """
+    get text of element
+    :param element:
+    :return:
+    """
+    if element is None:
+        return 0
+    text = ''.join(element.xpath('.//text()'))
+    text = re.sub(r'\s*', '', text, flags=re.S)
+    return text
+
+
 def number_of_char(element: Element):
     """
     get number of char, for example, result of `<a href="#">hello</a>world` = 10
     :param element:
     :return: length
     """
-    if element is None:
-        return 0
-    text = ''.join(element.xpath('.//text()'))
-    text = re.sub(r'\s*', '', text, flags=re.S)
-    return len(text)
+    return len(text(element))
 
 
 def number_of_linked_char(element: Element):
@@ -246,6 +320,17 @@ def number_of_descendants(element: Element):
     if element is None:
         return 0
     return len(list(descendants(element, including=False)))
+
+
+def number_of_siblings(element: Element):
+    """
+    get number of siblings
+    :param element:
+    :return:
+    """
+    if element is None:
+        return 0
+    return len(list(siblings(element, including=False)))
 
 
 def number_of_children(element: Element):
@@ -322,6 +407,7 @@ def similarity_with_siblings(element: Element):
     scores = []
     for sibling in siblings(element):
         sibling_alias = alias(sibling)
+        # TODO: maybe compare all children not only alias
         scores.append(similarity(element.alias, sibling_alias))
     if not scores:
         return 0
