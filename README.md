@@ -98,3 +98,17 @@ Below are outputs:
 Just for Beta.
 
 Needs more effort to improve.
+
+## Reference
+
+### Paper
+
+* [面向不规则列表的网页数据抽取技术的研究](http://www.cnki.com.cn/Article/CJFDTotal-JSYJ201509023.htm)
+* [基于文本及符号密度的网页正文提取方法](https://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CJFQ&dbname=CJFDLAST2019&filename=GWDZ201908029&v=MDY4MTRxVHJXTTFGckNVUkxPZmJ1Wm5GQ2poVXJyQklqclBkTEc0SDlqTXA0OUhiWVI4ZVgxTHV4WVM3RGgxVDM=)
+* [基于块密度加权标签路径特征的Web新闻在线抽取](https://kns.cnki.net/kcms/detail/detail.aspx?filename=PZKX201708010&dbcode=CJFQ&dbname=CJFD2017&v=)
+* [基于DOM树和视觉特征的网页信息自动抽取](http://www.cnki.com.cn/Article/CJFDTOTAL-JSJC201310069.htm)
+
+### Project
+
+* [GeneralNewsExtractor](https://github.com/kingname/GeneralNewsExtractor)
+* [Readability](https://github.com/buriy/python-readability)
