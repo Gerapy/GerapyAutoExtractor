@@ -1,7 +1,3 @@
-from lxml.html import fromstring
-
-from gerapy_auto_extractor.extractors import extract
-from gerapy_auto_extractor.schemas.element import Element
 from gerapy_auto_extractor.extractors.list import extract_list
 import json
 from os.path import join, dirname, abspath

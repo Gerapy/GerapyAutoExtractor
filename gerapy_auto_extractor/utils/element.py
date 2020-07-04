@@ -18,9 +18,9 @@ def remove_element(element: Element):
     """
     if element is None:
         return
-    parent = element.getparent()
-    if parent is not None:
-        parent.remove(element)
+    p = element.getparent()
+    if p is not None:
+        p.remove(element)
 
 
 def remove_children(element: Element, xpaths):
@@ -65,13 +65,13 @@ def selector(element: Element):
         return ''
     p = parent(element)
     if p is not None:
-        return selector(p) + '/' + element.alias
+        return selector(p) + '>' + element.alias
     return element.alias
 
 
-def tag_path(element: Element):
+def path_raw(element: Element):
     """
-    get tag path using recursive function.
+    get tag path using recursive function, only contains raw tag
     for example result: html/body/div/div/ul/li
     :param element:
     :return:
@@ -80,11 +80,27 @@ def tag_path(element: Element):
         return ''
     p = parent(element)
     if p is not None:
-        return tag_path(p) + '/' + element.tag
+        return path_raw(p) + '/' + element.tag
     return element.tag
 
 
-def linked_descendants(element: Element):
+def path(element: Element):
+    """
+    get tag path using recursive function.
+    for example result: html/body/div/div/ul/li
+    :param element:
+    :return:
+    """
+    if element is None:
+        return ''
+    result = path_raw(element)
+    # get nth-child
+    nth = len(list(element.itersiblings(preceding=True))) + 1
+    result += f':nth-child({nth})' if nth != 1 else ''
+    return result
+
+
+def a_descendants(element: Element):
     """
     get
     :param element:
@@ -99,16 +115,16 @@ def linked_descendants(element: Element):
     return descendants
 
 
-def linked_descendants_group(element: Element):
+def a_descendants_group(element: Element):
     """
     get linked descendants group
     :param element:
     :return:
     """
     result = defaultdict(list)
-    for linked_descendant in element.linked_descendants:
-        _tag_path = linked_descendant.tag_path
-        result[_tag_path].append(linked_descendant)
+    for linked_descendant in element.a_descendants:
+        p = linked_descendant.path_raw
+        result[p].append(linked_descendant)
     return result
 
 
@@ -193,11 +209,11 @@ def alias(element: Element):
     attribs = [tag]
     for k, v in element.attrib.items():
         k, v = re.sub(r'\s*', '', k), re.sub(r'\s*', '', v)
-        attribs.append(f'{k}={v}')
-    result = '&'.join(attribs)
+        attribs.append(f'[{k}="{v}"]' if v else f'[{k}]')
+    result = ''.join(attribs)
     # get nth-child
     nth = len(list(element.itersiblings(preceding=True))) + 1
-    result += f'::index({nth})' if nth != 1 else ''
+    result += f'::nth-child({nth})' if nth != 1 else ''
     return result
 
 
@@ -255,7 +271,7 @@ def number_of_char(element: Element):
     return len(text(element))
 
 
-def number_of_linked_char(element: Element):
+def number_of_a_char(element: Element):
     """
     get number of linked char, for example, result of `<a href="#">hello</a>world` = 5
     :param element:
@@ -268,18 +284,7 @@ def number_of_linked_char(element: Element):
     return len(text)
 
 
-def number_of_tag(element: Element):
-    """
-    get number of all tags in this element
-    :param element:
-    :return:
-    """
-    if element is None:
-        return 0
-    return len(element.xpath('.//*'))
-
-
-def number_of_p_tag(element: Element):
+def number_of_p_descendants(element: Element):
     """
     get number of p tags
     :param element:
@@ -290,7 +295,7 @@ def number_of_p_tag(element: Element):
     return len(element.xpath('.//p'))
 
 
-def number_of_linked_tag(element: Element):
+def number_of_a_descendants(element: Element):
     """
     get number of a tags in this element
     :param element:
@@ -323,6 +328,7 @@ def number_of_descendants(element: Element):
     """
     if element is None:
         return 0
+    # return len(element.xpath('.//*'))
     return len(list(descendants(element, including=False)))
 
 
@@ -351,29 +357,16 @@ def number_of_children(element: Element):
 def density_of_text(element: Element):
     """
     get density of text, using:
-               number_of_char - number_of_linked_char
+               number_of_char - number_of_a_char
     result = ------------------------------------------
-               number_of_tags - number_of_linked_tags
-    :param element_info:
+               number_of_descendants - number_of_a_descendants
     :return:
     """
-    if element.number_of_char is None:
-        element.number_of_char = number_of_char(element)
-    
-    if element.number_of_linked_char is None:
-        element.number_of_linked_char = number_of_linked_char(element)
-    
-    if element.number_of_tag is None:
-        element.number_of_tag = number_of_tag(element)
-    
-    if element.number_of_linked_tag is None:
-        element.number_of_linked_tag = number_of_linked_tag(element)
-    
     # if denominator is 0, just return 0
-    if element.number_of_tag - element.number_of_linked_tag == 0:
+    if element.number_of_descendants - element.number_of_a_descendants == 0:
         return 0
-    return (element.number_of_char - element.number_of_linked_char) / \
-           (element.number_of_tag - element.number_of_linked_tag)
+    return (element.number_of_char - element.number_of_a_char) / \
+           (element.number_of_descendants - element.number_of_a_descendants)
 
 
 def density_of_punctuation(element: Element):
@@ -385,16 +378,7 @@ def density_of_punctuation(element: Element):
     :param element:
     :return:
     """
-    if element.number_of_char is None:
-        element.number_of_char = number_of_char(element)
-    
-    if element.number_of_linked_char is None:
-        element.number_of_linked_char = number_of_linked_char(element)
-    
-    if element.number_of_punctuation is None:
-        element.number_of_punctuation = number_of_punctuation(element)
-    
-    result = (element.number_of_char - element.number_of_linked_char) / \
+    result = (element.number_of_char - element.number_of_a_char) / \
              (element.number_of_punctuation + 1)
     # result should not be zero
     return result or 1
@@ -425,29 +409,3 @@ def similarity_with_siblings(element: Element):
     if not scores:
         return 0
     return mean(scores)
-
-
-def fill_element_info(element: Element):
-    """
-    calculate info of this element, for example, number of char
-    :param element:
-    :return:
-    """
-    # element = element.element
-    
-    # fill id
-    element.id = hash(element)
-    element.tag_name = element.tag
-    
-    # fill number_of_char
-    element.number_of_char = number_of_char(element)
-    element.number_of_linked_char = number_of_linked_char(element)
-    element.number_of_tag = number_of_tag(element)
-    element.number_of_linked_tag = number_of_linked_tag(element)
-    element.number_of_p_tag = number_of_p_tag(element)
-    element.number_of_punctuation = number_of_punctuation(element)
-    
-    # fill density
-    element.density_of_text = density_of_text(element)
-    element.density_of_punctuation = density_of_punctuation(element)
-    return element

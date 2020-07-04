@@ -6,8 +6,7 @@ import numpy as np
 from collections import defaultdict
 
 from gerapy_auto_extractor.utils.cluster import cluster_dict
-from gerapy_auto_extractor.utils.element import similarity_with_siblings, number_of_linked_tag, linked_descendants, \
-    text, siblings, descendants
+from gerapy_auto_extractor.utils.element import similarity_with_siblings
 from gerapy_auto_extractor.utils.preprocess import preprocess4list
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 from gerapy_auto_extractor.utils.element import descendants_of_body, number_of_siblings, number_of_descendants, parent
@@ -58,19 +57,16 @@ class ListExtractor(BaseExtractor):
         descendants_tree = defaultdict(list)
         descendants = descendants_of_body(element)
         for descendant in descendants:
-            # descendant.id = hash(descendant)
-            descendant.number_of_siblings = number_of_siblings(descendant)
-            # if one element does not have enough siblings, this is not a child of candidate element
+            # if one element does not have enough siblings, it can not become a child of candidate element
             if descendant.number_of_siblings + 1 < self.min_number:
                 continue
-            
-            if descendant.linked_descendants_group_text_min_length > self.max_length:
+            # if min length is larger than specified max length, it can not become a child of candidate element
+            if descendant.a_descendants_group_text_min_length > self.max_length:
                 continue
-            
-            if descendant.linked_descendants_group_text_max_length < self.min_length:
+            # if max length is smaller than specified min length, it can not become a child of candidate element
+            if descendant.a_descendants_group_text_max_length < self.min_length:
                 continue
-            
-            descendant.similarity_with_siblings = similarity_with_siblings(descendant)
+            # descendant element must have same siblings which their similarity should not below similarity_threshold
             if descendant.similarity_with_siblings < self.similarity_threshold:
                 continue
             descendants_tree[descendant.parent_selector].append(descendant)
@@ -117,29 +113,29 @@ class ListExtractor(BaseExtractor):
         # get best tag path of title
         probabilities_of_title = defaultdict(list)
         for element in cluster:
-            descendants = element.linked_descendants
+            descendants = element.a_descendants
             for descendant in descendants:
-                _tag_path = descendant.tag_path
-                descendant_text = text(descendant)
+                path = descendant.path
+                descendant_text = descendant.text
                 probability_of_title_with_length = self._probability_of_title_with_length(len(descendant_text))
                 # probability_of_title_with_descendants = self.probability_of_title_with_descendants(descendant)
                 # TODO: add more quota to calculate probability_of_title
                 probability_of_title = probability_of_title_with_length
-                probabilities_of_title[_tag_path].append(probability_of_title)
+                probabilities_of_title[path].append(probability_of_title)
         # get most probable tag_path
         probabilities_of_title_avg = {k: np.mean(v) for k, v in probabilities_of_title.items()}
-        best_tag_path = max(probabilities_of_title_avg.items(), key=operator.itemgetter(1))[0]
-        logger.debug(f'best tag path {best_tag_path}')
+        best_path = max(probabilities_of_title_avg.items(), key=operator.itemgetter(1))[0]
+        logger.debug(f'best tag path {best_path}')
         
         # extract according to best tag path
         result = []
         for element in cluster:
-            descendants = element.linked_descendants
+            descendants = element.a_descendants
             for descendant in descendants:
-                _tag_path = descendant.tag_path
-                if _tag_path != best_tag_path:
+                path = descendant.path
+                if path != best_path:
                     continue
-                title = text(descendant)
+                title = descendant.text
                 href = descendant.attrib.get('href')
                 if not href:
                     continue
@@ -177,15 +173,3 @@ def extract_list(html):
     :return:
     """
     return list_extractor.extract(html)
-
-
-if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-    
-    x = np.asarray(range(0, 40))
-    print('x', x)
-    print(list_extractor.probability_of_title_with_length(17))
-    y1 = list_extractor.probability_of_title_with_length(x)
-    plt.plot(x, y1, 'g', label='m=0,sig=2')
-    plt.show()
-    print(list_extractor.probability_of_title_with_length(0))

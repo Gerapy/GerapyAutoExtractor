@@ -1,6 +1,5 @@
 import numpy as np
 from gerapy_auto_extractor.schemas.element import Element
-from gerapy_auto_extractor.utils.element import fill_element_info
 from gerapy_auto_extractor.utils.preprocess import preprocess4content
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 from gerapy_auto_extractor.utils.element import descendants_of_body
@@ -23,8 +22,6 @@ class ContentExtractor(BaseExtractor):
         # start to evaluate every child element
         element_infos = []
         descendants = descendants_of_body(element)
-        for descendant in descendants:
-            fill_element_info(descendant)
         
         # get std of density_of_text among all elements
         density_of_text = [descendant.density_of_text for descendant in descendants]
@@ -34,7 +31,7 @@ class ContentExtractor(BaseExtractor):
         for descendant in descendants:
             score = np.log(density_of_text_std) * \
                     descendant.density_of_text * \
-                    np.log10(descendant.number_of_p_tag + 2) * \
+                    np.log10(descendant.number_of_p_descendants + 2) * \
                     np.log(descendant.density_of_punctuation)
             descendant.density_score = score
         
