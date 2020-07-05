@@ -147,14 +147,14 @@ class ListExtractor(BaseExtractor):
                 if path != best_path:
                     continue
                 title = descendant.text
-                href = descendant.attrib.get('href')
-                if not href:
+                url = descendant.attrib.get('href')
+                if not url:
                     continue
-                if href.startswith('//'):
-                    href = 'http:' + href
+                if url.startswith('//'):
+                    url = 'http:' + url
                 result.append({
                     'title': title,
-                    'href': href
+                    'url': url
                 })
         return result
     
