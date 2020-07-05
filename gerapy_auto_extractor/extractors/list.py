@@ -98,10 +98,10 @@ class ListExtractor(BaseExtractor):
             # calculate number of elements
             clusters_score[cluster_id]['number_of_elements'] = len(cluster)
             # calculate probability of it contains title
-            clusters_score[cluster_id]['probability_of_title_with_length'] = np.mean([
-                self._probability_of_title_with_length(len(a_descendant.text)) \
-                for a_descendant in itertools.chain(*[element.a_descendants for element in cluster]) \
-                ])
+            # clusters_score[cluster_id]['probability_of_title_with_length'] = np.mean([
+            #     self._probability_of_title_with_length(len(a_descendant.text)) \
+            #     for a_descendant in itertools.chain(*[element.a_descendants for element in cluster]) \
+            #     ])
             # TODO: add more quota to select best cluster
             clusters_score[cluster_id]['clusters_score'] = \
                 clusters_score[cluster_id]['avg_similarity_with_siblings'] \
