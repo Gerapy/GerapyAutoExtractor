@@ -117,9 +117,11 @@ Needs more effort to improve.
 
 If you use Gerapy Auto Extractor in your research or project, please add a reference using the following BibTeX entry.
 
+```
 @misc{cui2020gerapy,
   author =       {Qingcai Cui},
   title =        {Gerapy Auto Extractor},
   howpublished = {\url{https://github.com/Gerapy/GerapyAutoExtractor}},
   year =         {2020}
 }
+```
