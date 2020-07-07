@@ -4,6 +4,8 @@ This is the Auto Extractor Module for Gerapy.
 
 You can also use it separately.
 
+Introduction: [Introduction](https://cuiqingcai.com/9479.html)
+
 ## Installation
 
 ```
