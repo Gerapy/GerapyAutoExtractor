@@ -29,7 +29,7 @@ Usage example:
 
 ```python
 from gerapy_auto_extractor.extractors.list import extract_list
-from gerapy_auto_extractor.extractors import extract
+from gerapy_auto_extractor.extractors import extract_detail
 import json
 
 html = open('samples/list/sample4.html', encoding='utf-8').read()
@@ -37,7 +37,7 @@ print(json.dumps(extract_list(html), indent=2, ensure_ascii=False, default=str))
 
 
 html = open('samples/content/sample2.html', encoding='utf-8').read()
-print(json.dumps(extract(html), indent=2, ensure_ascii=False, default=str))
+print(json.dumps(extract_detail(html), indent=2, ensure_ascii=False, default=str))
 ```
 
 HTML files can be found in [samples](./samples).
