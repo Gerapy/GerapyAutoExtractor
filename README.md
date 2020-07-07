@@ -28,7 +28,7 @@ This package implemented this column for different pages:
 Usage example:
 
 ```python
-from gerapy_auto_extractor.extractors.list import extract_list
+from gerapy_auto_extractor.extractors import extract_list
 from gerapy_auto_extractor.extractors import extract_detail
 import json
 
