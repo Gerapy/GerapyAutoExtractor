@@ -240,6 +240,7 @@ list_extractor = ListExtractor()
 def extract_list(html, **kwargs):
     """
     extract list from index html
+    :param: base_url
     :return:
     """
     return list_extractor.extract(html, **kwargs)
