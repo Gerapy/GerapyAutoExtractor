@@ -6,11 +6,9 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/gerapy-auto-extractor)
 ![License](https://img.shields.io/badge/license-Apache%202-blue)
 
-This is the Auto Extractor Module for [Gerapy](https://github.com/Gerapy/Gerapy).
+This is the Auto Extractor Module for [Gerapy](https://github.com/Gerapy/Gerapy), You can also use it separately.
 
-You can also use it separately.
-
-Introduction: [Introduction](https://cuiqingcai.com/9479.html)
+Introduction: [Introduction](https://www.v2ex.com/t/687948)
 
 ## Installation
 
