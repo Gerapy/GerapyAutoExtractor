@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+title: Feature request of Gerapy Auto Extractor
+labels: enhancement
+assignees: Germey
 
 ---
 
