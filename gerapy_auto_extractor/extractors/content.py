@@ -40,7 +40,11 @@ class ContentExtractor(BaseExtractor):
         descendant_first = descendants[0] if descendants else None
         if descendant_first is None:
             return None
-        text = '\n'.join(descendant_first.xpath('.//p//text()'))
+        paragraphs = descendant_first.xpath('.//p//text()')
+        paragraphs = [paragraph.strip() if paragraph else '' for paragraph in paragraphs]
+        paragraphs = list(filter(lambda x: x, paragraphs))
+        text = '\n'.join(paragraphs)
+        text = text.strip()
         return text
 
 

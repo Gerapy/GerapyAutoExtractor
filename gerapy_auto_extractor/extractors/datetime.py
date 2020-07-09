@@ -53,6 +53,8 @@ def parse_datetime(datetime):
     :param datetime:
     :return:
     """
+    if not datetime:
+        return None
     try:
         return parse(datetime)
     except TypeError:
@@ -62,6 +64,7 @@ def parse_datetime(datetime):
 def extract_datetime(html, parse=True):
     """
     extract datetime from html
+    :param parse:
     :param html:
     :return:
     """

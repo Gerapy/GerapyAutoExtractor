@@ -30,8 +30,7 @@ This package implemented this column for different pages:
 Usage example:
 
 ```python
-from gerapy_auto_extractor.extractors import extract_list
-from gerapy_auto_extractor.extractors import extract_detail
+from gerapy_auto_extractor import extract_list, extract_detail, 
 import json
 
 html = open('samples/list/sample4.html', encoding='utf-8').read()
