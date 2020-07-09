@@ -1,6 +1,6 @@
 # Gerapy Auto Extractor
 
-This is the Auto Extractor Module for Gerapy.
+This is the Auto Extractor Module for [Gerapy](https://github.com/Gerapy/Gerapy).
 
 You can also use it separately.
 
