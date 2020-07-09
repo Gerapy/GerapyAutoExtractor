@@ -1,6 +1,6 @@
 from lxml.html import fromstring
 from loguru import logger
-from lxml.html import HtmlElement, etree
+from lxml.html import etree
 from gerapy_auto_extractor.schemas.element import Element
 
 

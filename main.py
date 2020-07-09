@@ -1,11 +1,7 @@
-from gerapy_auto_extractor.extractors.list import extract_list
-from gerapy_auto_extractor.extractors import extract_detail
-import json
-from os.path import join, dirname, abspath
+from gerapy_auto_extractor import extract_list, extract_detail, jsonify
 
-html = open(join(dirname(abspath(__file__)), 'samples/list/sample4.html'), encoding='utf-8').read()
-print(json.dumps(extract_list(html), indent=2, ensure_ascii=False, default=str))
+html = open('samples/list/sample.html', encoding='utf-8').read()
+print(jsonify(extract_list(html)))
 
-
-html = open(join(dirname(abspath(__file__)), 'samples/content/sample2.html'), encoding='utf-8').read()
-print(json.dumps(extract_detail(html), indent=2, ensure_ascii=False, default=str))
+html = open('samples/content/sample.html', encoding='utf-8').read()
+print(jsonify(extract_detail(html)))
