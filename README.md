@@ -1,8 +1,10 @@
 # Gerapy Auto Extractor
 
-This is the Auto Extractor Module for Gerapy.
+This is the Auto Extractor Module for [Gerapy](https://github.com/Gerapy/Gerapy).
 
 You can also use it separately.
+
+Introduction: [Introduction](https://cuiqingcai.com/9479.html)
 
 ## Installation
 
@@ -22,14 +24,14 @@ This package implemented this column for different pages:
 
 ### List Page
 
-* href
+* url
 * title
 
 Usage example:
 
 ```python
-from gerapy_auto_extractor.extractors.list import extract_list
-from gerapy_auto_extractor.extractors import extract
+from gerapy_auto_extractor.extractors import extract_list
+from gerapy_auto_extractor.extractors import extract_detail
 import json
 
 html = open('samples/list/sample4.html', encoding='utf-8').read()
@@ -37,7 +39,7 @@ print(json.dumps(extract_list(html), indent=2, ensure_ascii=False, default=str))
 
 
 html = open('samples/content/sample2.html', encoding='utf-8').read()
-print(json.dumps(extract(html), indent=2, ensure_ascii=False, default=str))
+print(json.dumps(extract_detail(html), indent=2, ensure_ascii=False, default=str))
 ```
 
 HTML files can be found in [samples](./samples).
@@ -48,43 +50,43 @@ Below are outputs:
 [
   {
     "title": "00后比90后少了4700万！这些大省出手了！专家：人口负增长拐点或在2027年前到来",
-    "href": "https://new.qq.com/omn/20200704/20200704A04HVX00.html"
+    "url": "https://new.qq.com/omn/20200704/20200704A04HVX00.html"
   },
   {
     "title": "三大战区海军演练",
-    "href": "https://new.qq.com/omn/20200704/20200704V05JOU00.html"
+    "url": "https://new.qq.com/omn/20200704/20200704V05JOU00.html"
   },
   {
     "title": "专题传奇落幕！林丹正式宣布退役无缘第五次征战奥运",
-    "href": "https://new.qq.com/zt/template/?id=SPO2020070400561800"
+    "url": "https://new.qq.com/zt/template/?id=SPO2020070400561800"
   },
   {
     "title": "丹麦国宝小美人鱼雕像被喷上“种族主义鱼”涂鸦，警方在查！",
-    "href": "https://new.qq.com/omn/20200704/20200704A05G9A00.html"
+    "url": "https://new.qq.com/omn/20200704/20200704A05G9A00.html"
   },
   {
     "title": "专题中移动招标风波细节曝光：美的举报格力造假，格力称系小失误",
-    "href": "https://new.qq.com/zt/template/?id=FIN2020070400288400"
+    "url": "https://new.qq.com/zt/template/?id=FIN2020070400288400"
   },
   {
     "title": "想引2000名博士硕士遭热议，这个弱省会城市如何破局",
-    "href": "https://new.qq.com/omn/20200704/20200704A06UAW00.html"
+    "url": "https://new.qq.com/omn/20200704/20200704A06UAW00.html"
   },
   {
     "title": "每天“像狗一样被殴打”，韩国22岁女运动员因长期遭霸凌选择自尽",
-    "href": "https://new.qq.com/omn/20200704/20200704A0946000.html"
+    "url": "https://new.qq.com/omn/20200704/20200704A0946000.html"
   },
   {
     "title": "贵州毕节发生4.5级地震幼儿园老师带176名孩子17秒撤离",
-    "href": "https://new.qq.com/omn/20200703/20200703V0G4E800.html"
+    "url": "https://new.qq.com/omn/20200703/20200703V0G4E800.html"
   },
   {
     "title": "浙江法华寺招聘抖音视频编导：朝九晚五，月薪过万",
-    "href": "https://new.qq.com/omn/20200704/20200704A09CJO00.html"
+    "url": "https://new.qq.com/omn/20200704/20200704A09CJO00.html"
   },
   {
     "title": "新京报评论：“野火青年”们，别假装关心洪灾受灾同胞了",
-    "href": "https://new.qq.com/omn/20200704/20200704A07ENE00.html"
+    "url": "https://new.qq.com/omn/20200704/20200704A07ENE00.html"
   }
 ]
 
@@ -112,3 +114,16 @@ Needs more effort to improve.
 
 * [GeneralNewsExtractor](https://github.com/kingname/GeneralNewsExtractor)
 * [Readability](https://github.com/buriy/python-readability)
+
+## Citing 
+
+If you use Gerapy Auto Extractor in your research or project, please add a reference using the following BibTeX entry.
+
+```
+@misc{cui2020gerapy,
+  author =       {Qingcai Cui},
+  title =        {Gerapy Auto Extractor},
+  howpublished = {\url{https://github.com/Gerapy/GerapyAutoExtractor}},
+  year =         {2020}
+}
+```
