@@ -23,8 +23,11 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install Libraries
+      run: | 
+        sudo apt-get update
+        sudo apt-get install -y libxml2-dev libxslt-dev python-dev
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        apt-get install libxml2-dev libxslt-dev python-dev
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
