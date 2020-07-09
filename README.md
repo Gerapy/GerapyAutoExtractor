@@ -1,5 +1,6 @@
 # Gerapy Auto Extractor
 
+![Python package](https://github.com/Gerapy/GerapyAutoExtractor/workflows/Python%20package/badge.svg)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/gerapy-auto-extractor)
 ![PyPI](https://img.shields.io/pypi/v/gerapy-auto-extractor)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/gerapy-auto-extractor)
