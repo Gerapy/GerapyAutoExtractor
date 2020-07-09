@@ -4,7 +4,7 @@ from gerapy_auto_extractor.schemas.element import Element
 from gerapy_auto_extractor.utils.element import children, remove_element, remove_children
 
 CONTENT_USELESS_TAGS = ['meta', 'style', 'script', 'link', 'video', 'audio', 'iframe', 'source', 'svg', 'path',
-                        'symbol', 'img']
+                        'symbol', 'img', 'footer', 'header']
 CONTENT_STRIP_TAGS = ['span', 'blockquote']
 CONTENT_NOISE_XPATHS = [
     '//div[contains(@class, "comment")]',
@@ -42,15 +42,10 @@ def preprocess4content(element: HtmlElement):
             child.tag = 'p'
 
 
-LIST_USELESS_TAGS = ['meta', 'style', 'script', 'link', 'video', 'audio', 'iframe', 'source', 'svg', 'path',
-                        'symbol', 'img']
-LIST_STRIP_TAGS = ['span', 'blockquote']
-LIST_NOISE_XPATHS = [
-    '//div[contains(@class, "comment")]',
-    '//div[contains(@class, "advertisement")]',
-    '//div[contains(@class, "advert")]',
-    '//div[contains(@style, "display: none")]',
-]
+LIST_USELESS_TAGS = CONTENT_USELESS_TAGS
+LIST_STRIP_TAGS = CONTENT_STRIP_TAGS
+LIST_NOISE_XPATHS = CONTENT_NOISE_XPATHS
+
 
 def preprocess4list(element: Element):
     """

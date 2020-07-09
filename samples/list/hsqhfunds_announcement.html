@@ -1,0 +1,471 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+	<meta http-equiv="Cache-Control" content="no-store, no-cache">
+	<meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="expires" content="0">
+    <link rel="stylesheet" type="text/css" href="/css/ui.css" media="all">
+    <script type="text/javascript" src="/js/lib/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/swiper.min.css" media="all">
+    <script type="text/javascript" src="/js/swiper/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/lib/JSON.js"></script>
+    <title>恒生前海基金|信息披露</title>
+    <link rel="shortcut icon" type="images/x-icon" href="/img/logo.ico" media="screen">
+    <meta name="description" content="恒生前海基金管理有限公司（“恒生前海基金”）成立于2016年7月1日，是CEPA10框架下经中国证监会核准设立的首家外资控股公募基金管理公司，注册资本金2亿元人民币。恒生前海基金的股东结构为：恒生银行有限公司（持股比例70%）、深圳市前海金融控股有限公司（持股比例30%），恒生前海基金将充分利用股东双方的经验和资源，通过专业团队建立投资研究和业务发展等方面的核心能力,提供符合客户需求的优质投资基金和资产管理服务。">
+
+	<!--20200404 清明
+	<style type="text/css">
+	body{
+	filter: gray !important;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+	filter: grayscale(95%);
+	-webkit-filter: grayscale(95%);
+	-moz-filter: grayscale(95%);
+	-ms-filter: grayscale(95%);
+	-o-filter: grayscale(95%);
+
+	}
+	</style>
+	-->
+
+<link href="/js/lib/date/datePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css"></head>
+<body>
+<!--beginheader-->
+<div class="header-box" style="width: 1762px;">
+  <div class="header">
+    <a href="index_10022.jhtml" class="logo"></a>
+    <div class="header-right">
+      <div class="header-nav">
+        <a href="common_100256.jhtml">联系我们</a>
+        <a href="https://www.hangseng.com/zh-cn/home/" title="您将通过此链接转至恒生银行集团其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款" target="_blank" rel="nofollow me noopener noreferrer">恒生银行</a>
+        <a href="https://www.hangsenginvestment.com/zh-cn/hsvm/home/" title="您将通过此链接转至恒生银行集团其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款" target="_blank" rel="nofollow me noopener noreferrer">恒生投资</a>
+        <span style="  display: inline-block; color: #595757;padding: 0px 6px;border-left: 1px #7a7979 solid;font-size: 12px">服务热线：400-620-6608</span>
+      </div>
+      <div class="search-input">
+        <a href="JavaScript:void(0);" class="search-btn" id="serachButton"></a>
+        <form id="form-search" method="post" action="/front/search.jhtml" target="_blank" rel="nofollow me noopener noreferrer">
+    		<input name="params.pageNo" type="hidden" value="1">
+        	<input type="text" name="params.condition" id="keyword" placeholder="基金名称/代码">
+        	<div id="fund_block" style="display:none"></div>
+		</form>
+      </div>
+    </div>
+    <div class="login-box-new">
+     	<div class="login-choose">
+     		<div class="login-choose-now"><span>网上查询登录</span></div>
+     		<div class="login-choose-box">
+     			<div class="login-choose-msg">登录</div>
+     			<a href="https://etrade.hsqhfunds.com/etrade" target="_blank" rel="nofollow me noopener noreferrer" class="login-choose01">个人用户登录
+				<span></span>
+				</a>
+     			<a href="https://etrade.hsqhfunds.com/etrade" target="_blank" rel="nofollow me noopener noreferrer" class="login-choose02">机构用户登录
+					<span></span>
+				</a>
+     			<a href="javascript:void(0)" class="login-choose03" style="display:none">高端理财登录
+					<span></span>
+				</a>
+     		</div>
+     	</div>
+    </div>
+
+  </div>
+</div>
+
+
+       <!--top开始-->
+        <!--navigator导航开始-->
+<!--导航-->
+<div class="nav-box">
+	<div class="nav">
+		<a name="10022" href="/" style="background: none;">首页</a>
+		<a name="100020" id="navfund" href="/front/product_100020.jhtml">基金产品</a>
+		<a name="100128" href="/front/common_100128.jhtml">专户理财</a>
+		<a name="10004" href="/front/common_10004.jhtml">投资视点</a>
+		<a name="100118" href="/front/common_100118.jhtml" class="active">资讯中心</a>
+		<a name="10007" href="/front/common_10007.jhtml" style="background: none;">客户服务</a>
+		<a name="10002" href="/front/common_10002.jhtml">关于我们</a>
+	</div>
+
+	<div id="fundNav">
+		<div class="fund-nav" id="fund-nav">
+		 　　　<div class="fund-type" id="fund_type"><span status="0"><a href="product_100020.jhtml?4">混合型</a></span><span status="1"><a href="product_100020.jhtml?1">股票型</a></span><span status="2"><a href="product_100020.jhtml?5">指数型</a></span><span status="3"><a href="product_100020.jhtml?3">债券型</a></span><span status="4"><a href="product_100020.jhtml?2">货币型</a></span></div>
+			<div class="line"></div>
+		<div class="fund-type-detail display-block"><img src="/upload/user/1/2016-8-22/195400681255.jpg"><div class="fund-type-text"><div class="fz-l">混合型</div><div style="margin-top:20px;">&nbsp;</div></div></div><div class="fund-type-detail"><img src="/upload/user/1/2016-8-22/195400681268.jpg"><div class="fund-type-text"><div class="fz-l">股票型</div><div style="margin-top:20px;">&nbsp;</div></div></div><div class="fund-type-detail"><img src="/upload/user/1/2016-8-22/195400681236.jpg"><div class="fund-type-text"><div class="fz-l">指数型</div><div style="margin-top:20px;">&nbsp;</div></div></div><div class="fund-type-detail"><img src="/upload/user/1/2016-8-22/195400681473.jpg"><div class="fund-type-text"><div class="fz-l">债券型</div><div style="margin-top:20px;">&nbsp;</div></div></div><div class="fund-type-detail"><img src="/upload/user/1/2016-8-22/195400681228.jpg"><div class="fund-type-text"><div class="fz-l">货币型</div><div style="margin-top:20px;">&nbsp;</div></div></div></div>
+	</div>
+</div>
+<script language="javascript">
+$(function(){	//输出导航下拉菜单（基金）
+				var navs = [{"topChannelId":100020,"channelId":100235,"parentId":100020,"priority":1,"isDisplay":"2","channelName":"混合型","isStaticChannel":"1","isStaticContent":"2","channelRule":"product","contentRule":"productDetail","link":"100235","tplChannel":"model/channel/product_product.ftl","tplContent":"model/content/productDetail_productDetail.ftl","titleImg":"1/2016-8-22/195400681255.jpg","hasTitleImg":"hh_img","txt":"&nbsp;","tplChannelPrefix":"product","isLeaf":"true","isThirdUrl":"0","channelCode":"C2","modelType":"6","channelNamespace":"/front","contentNamespace":"/front","contentDataService":"contentDataService","channelDataService":"frontCommonService","channelLevel":0},{"topChannelId":100020,"channelId":100329,"parentId":100020,"priority":2,"isDisplay":"2","channelName":"股票型","isStaticChannel":"1","isStaticContent":"1","channelRule":"product","contentRule":"productDetail","link":"100329","tplChannel":"model/channel/product_product.ftl","tplContent":"model/content/productDetail_productDetail.ftl","titleImg":"1/2016-8-22/195400681268.jpg","hasTitleImg":"gp_img","title":"2222","txt":"&nbsp;","tplChannelPrefix":"product","isLeaf":"true","isThirdUrl":"0","channelCode":"C1","modelType":"6","channelNamespace":"/front","contentNamespace":"/front","contentDataService":"contentDataService","channelDataService":"frontCommonService","channelLevel":0},{"topChannelId":100020,"channelId":100236,"parentId":100020,"priority":3,"isDisplay":"2","channelName":"指数型","isStaticChannel":"1","isStaticContent":"2","channelRule":"product","contentRule":"productDetail","link":"100236","tplChannel":"model/channel/product_product.ftl","tplContent":"model/content/productDetail_productDetail.ftl","titleImg":"1/2016-8-22/195400681236.jpg","hasTitleImg":"zs_img","txt":"&nbsp;","tplChannelPrefix":"product","isLeaf":"true","isThirdUrl":"0","channelCode":"C3","modelType":"6","channelNamespace":"/front","contentNamespace":"/front","contentDataService":"contentDataService","channelDataService":"frontCommonService","channelLevel":0},{"topChannelId":100020,"channelId":100237,"parentId":100020,"priority":4,"isDisplay":"2","channelName":"债券型","isStaticChannel":"1","isStaticContent":"2","channelRule":"product","contentRule":"productDetail","link":"100237","tplChannel":"model/channel/product_product.ftl","tplContent":"model/content/productDetail_productDetail.ftl","titleImg":"1/2016-8-22/195400681473.jpg","hasTitleImg":"01","txt":"&nbsp;","tplChannelPrefix":"product","isLeaf":"true","isThirdUrl":"0","channelCode":"C4","modelType":"6","channelNamespace":"/front","contentNamespace":"/front","contentDataService":"contentDataService","channelDataService":"frontCommonService","channelLevel":0},{"topChannelId":100020,"channelId":100238,"parentId":100020,"priority":5,"isDisplay":"2","channelName":"货币型","isStaticChannel":"1","isStaticContent":"2","channelRule":"product","contentRule":"productDetail","link":"100238","tplChannel":"model/channel/product_product.ftl","tplContent":"model/content/productDetail_productDetail.ftl","titleImg":"1/2016-8-22/195400681228.jpg","hasTitleImg":"hb_img","txt":"&nbsp;","tplChannelPrefix":"product","isLeaf":"true","isThirdUrl":"0","channelCode":"C5","modelType":"6","channelNamespace":"/front","contentNamespace":"/front","contentDataService":"contentDataService","channelDataService":"frontCommonService","channelLevel":0}];
+
+	if(navs!="" && navs.length >0 && navs[0].topChannelId == "100020") {
+
+	var productTypeGP = ""
+	var productTypeHB = ""
+	var productTypeZQ = '007941';
+	var productTypeZS = '005702';
+	var productTypeHH = '004332';
+
+    var htmlNav = "";
+	for (var i = 0; i < navs.length; i++) {
+        htmlNav = '<div class="fund-type-detail';
+        if(i==0){
+        	 htmlNav +=' display-block';
+        }
+        htmlNav +='"><img src="/upload/user/'+navs[i].titleImg+'">'+
+         	'<div class="fund-type-text">'+
+            '<div class="fz-l">'+navs[i].channelName+'</div>'+
+            '<div style="margin-top:20px;">'+navs[i].txt+'</div></div></div>';
+        var productChannelLink = '<span status="'+i+'">';
+        /*
+        if(navs[i].channelId == 100329 && productTypeGP != "" && productTypeGP != null){
+        	productChannelLink += '<a href="'+navs[i].contentRule+"_"+navs[i].parentId+'_'+productTypeGP+'.jhtml">';
+        }
+        else if(navs[i].channelId == 100235 && productTypeHH != "" && productTypeHH != null){
+        	productChannelLink += '<a href="'+navs[i].contentRule+"_"+navs[i].parentId+'_'+productTypeHH+'.jhtml">';
+        }
+        else if(navs[i].channelId == 100237 && productTypeZQ != "" && productTypeZQ != null){
+        	productChannelLink += '<a href="'+navs[i].contentRule+"_"+navs[i].parentId+'_'+productTypeZQ+'.jhtml">';
+        }
+        else if(navs[i].channelId == 100236 && productTypeZS != "" && productTypeZS != null){
+        	productChannelLink += '<a href="'+navs[i].contentRule+"_"+navs[i].parentId+'_'+productTypeZS+'.jhtml">';
+        }
+        else if(navs[i].channelId == 100238 && productTypeHB != "" && productTypeHB != null){
+        	productChannelLink += '<a href="'+navs[i].contentRule+"_"+navs[i].parentId+'_'+productTypeHB+'.jhtml">';
+        }
+		else
+			productChannelLink += '<a href="'+navs[i].channelRule+"_"+navs[i].channelId+'.jhtml">';
+		*/
+		var nav_fund_type = 0;
+		if(navs[i].channelName.indexOf("股票")>=0)
+			nav_fund_type = 1;
+		else if(navs[i].channelName.indexOf("货币")>=0)
+			nav_fund_type = 2;
+		else if(navs[i].channelName.indexOf("债券")>=0)
+			nav_fund_type = 3;
+		else if(navs[i].channelName.indexOf("混合")>=0)
+			nav_fund_type = 4;
+		else if(navs[i].channelName.indexOf("指数")>=0)
+			nav_fund_type = 5;
+		productChannelLink += '<a href="product_'+navs[i].parentId+'.jhtml?' + nav_fund_type + '">'
+		productChannelLink += navs[i].channelName+'</a></span>';
+
+        $("#fund_type").append(productChannelLink);
+        $("#fund-nav").append(htmlNav);
+        //$(".product-type").append("<div>"+navs[i].channelName+"</div>")
+  	}
+  }
+});
+</script>
+        <!--navigator导航结束-->
+
+        <!--banner-->
+						<div class="banner-s">
+		                        <div style="width:100%;height:100%;margin:0 auto;background:url(/upload/user/1/2016-9-6/195400909974.jpg) no-repeat center top;"></div>
+						</div>
+
+        <!--body开始-->
+    <div class="middle clearfix" id="content" style="clear:both;">
+			<div class="zh-place">
+            	<span>当前位置：</span>&nbsp;&nbsp;<a href="/">首页</a><span>&gt;</span>&nbsp;
+		                  <a href="/front/common_100118.jhtml">
+                            资讯中心
+                        </a>
+                     &nbsp;&gt;&nbsp;
+		                  <a href="/front/left_100186.jhtml">
+                            信息披露
+                        </a>
+
+            </div>
+
+        <!--显示左侧导航栏开始-->
+        <div class="container zh-container">
+                <div class="leftsidebar">
+                    <div class="menu-left1" id="dyLeftTree">
+                    <a href="/front/left_100186.jhtml" class="active">信息披露</a><a href="/front/left_100187.jhtml">媒体报道</a><a href="/front/left_160357.jhtml">投资者适当性</a><a href="/front/left_100345.jhtml">投资者教育</a></div>
+                </div>
+        <!--显示左侧导航栏结束-->
+
+        <div class="middle-right">
+
+
+    <input name="channelId" type="hidden" value="100186">
+    <input name="dyAction" type="hidden" value=".jhtml">
+    <input name="attachAction" type="hidden" value="upload/user">
+    <input name="linkChannel" type="hidden" value="[{topChannelId=100118, channelId=100118, parentId=0, channelPath=about, priority=5, isDisplay=2, channelName=资讯中心, isStaticChannel=1, isStaticContent=2, channelRule=common, link=100187, tplChannel=model/channel/channel_channel.ftl, hasTitleImg=0, txt=&nbsp;, releaseDate=Fri Aug 08 00:00:00 CST 2014, tplChannelPrefix=channel, isLeaf=false, isThirdUrl=0, channelCode=H, modelType=1, channelNamespace=/front, author=网站管理员, contentDataService=contentDataService, channelDataService=frontCommonService, channelLevel=0}, {topChannelId=100118, channelId=100186, parentId=100118, channelPath=about, priority=1, isDisplay=2, channelName=信息披露, isStaticChannel=1, isStaticContent=2, channelRule=left, contentRule=contentDetail, link=100186, tplChannel=model/channel/contentList_contentList.ftl, tplContent=model/content/contentDetail_contentDetail.ftl, hasTitleImg=0, txt=&nbsp;, releaseDate=Fri Aug 08 00:00:00 CST 2014, tplChannelPrefix=contentList, isLeaf=true, isThirdUrl=0, channelCode=H1, modelType=2, channelNamespace=/front, contentNamespace=/front, author=网站管理员, contentDataService=contentDataService, channelDataService=frontCommonService, channelLevel=0}]">
+    <input name="searchDateStart" type="hidden" value="">
+    <input name="searchDateEnd" type="hidden" value="">
+
+    <div class="zh-box display-block">
+
+   			<!--基金广告
+			-->
+
+		  <div class="News-title" id="newsTitle">
+		      <div class="fz-l fc-red01">信息披露</div>
+			      <div class="news-input">
+			        <span>时间区间：</span>
+			        <span><input id="startDate" type="text" value="" onblur="if(this.value=='') this.value=''" class="Wdate" name="params.startDate" onclick="WdatePicker();"></span>
+			        <span>-</span>
+			        <span><input id="endDate" type="text" value="" onblur="if(this.value=='') this.value=''" class="Wdate" name="params.endDate" onclick="WdatePicker();"></span>
+			        <span>关键字：</span>
+			        <span class="keyword"><input id="keyWord" type="text" name="keyWord"><a href="javascript:void(0);" onclick="searchContent(1);" name="confirm" id="searchContent">&nbsp;</a></span>
+			      </div>
+			  </div>
+	    <div id="dyContentMsgList"><div class="list-all"><a target="_blank" href="/upload/user/1/2020-7-2/195400974278.pdf">恒生前海沪深港通细分行业龙头指数证券投资基金开放日常申购、赎回、转换及定投业务的...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974278.jhtml">&nbsp;</a><span>2020-07-02</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-7-1/195400974222.pdf">恒生前海基金管理有限公司2020年6月30日基金净值公告</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974222.jhtml">&nbsp;</a><span>2020-07-01</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-24/195400974107.pdf">恒生前海基金管理有限公司关于恒生前海前消费升级混合型证券投资基金暂停申购、赎回、...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974107.jhtml">&nbsp;</a><span>2020-06-24</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-24/195400974111.pdf">恒生前海基金管理有限公司关于恒生前海前海港股通高股息低波动指数证券投资基金暂停申...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974111.jhtml">&nbsp;</a><span>2020-06-24</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-24/195400974115.pdf">恒生前海基金管理有限公司关于恒生前海前恒锦裕利混合型证券投资基金暂停申购、赎回、...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974115.jhtml">&nbsp;</a><span>2020-06-24</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-24/195400974119.pdf">恒生前海基金管理有限公司关于恒生前海前恒生前海港股通精选混合型证券投资基金暂停申...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974119.jhtml">&nbsp;</a><span>2020-06-24</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-24/195400974123.pdf">恒生前海基金管理有限公司关于恒生前海沪港深新兴产业精选混合型证券投资基金暂停申购...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974123.jhtml">&nbsp;</a><span>2020-06-24</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-19/195400974020.pdf">恒生前海基金管理有限公司关于恒生前海前消费升级混合型证券投资基金暂停申购、赎回、...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974020.jhtml">&nbsp;</a><span>2020-06-19</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-19/195400974015.pdf">恒生前海基金管理有限公司关于恒生前海前海港股通高股息低波动指数证券投资基金暂停申...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974015.jhtml">&nbsp;</a><span>2020-06-19</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-19/195400974010.pdf">恒生前海基金管理有限公司关于恒生前海前恒锦裕利混合型证券投资基金暂停申购、赎回、...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974010.jhtml">&nbsp;</a><span>2020-06-19</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-19/195400974005.pdf">恒生前海基金管理有限公司关于恒生前海前恒生前海港股通精选混合型证券投资基金暂停申...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400974005.jhtml">&nbsp;</a><span>2020-06-19</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-19/195400973995.pdf">恒生前海基金管理有限公司关于恒生前海沪港深新兴产业精选混合型证券投资基金暂停申购...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400973995.jhtml">&nbsp;</a><span>2020-06-19</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-18/195400973925.pdf">恒生前海短债债券型发起式证投资基金基金合同生效公告</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400973925.jhtml">&nbsp;</a><span>2020-06-18</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-10/195400973421.pdf">恒生前海基金管理有限公司关于旗下基金新增大连网金基金销售有限公司为销售机构并开通...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400973421.jhtml">&nbsp;</a><span>2020-06-10</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-6-10/195400973413.pdf">恒生前海基金管理有限公司关于旗下部分基金参加大连网金基金销售有限公司基金认购、申...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400973413.jhtml">&nbsp;</a><span>2020-06-10</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-5-29/195400973132.pdf">恒生前海基金管理有限公司关于客服热线恢复使用的公告</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400973132.jhtml">&nbsp;</a><span>2020-05-29</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-5-27/195400972961.pdf">恒生前海基金管理有限公司关于客服热线故障的公告</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400972961.jhtml">&nbsp;</a><span>2020-05-27</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-5-22/195400972727.pdf">恒生前海恒生沪深港通细分行业龙头指数证券投资基金基金合同生效公告</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400972727.jhtml">&nbsp;</a><span>2020-05-23</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-5-21/195400972466.pdf">恒生前海基金管理有限公司关于旗下基金新增上海中正达广基金销售有限公司为销售机构并...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400972466.jhtml">&nbsp;</a><span>2020-05-21</span></span></div><div class="list-all"><a target="_blank" href="/upload/user/1/2020-5-21/195400972460.pdf">恒生前海基金管理有限公司关于旗下部分基金参加上海中正达广基金销售有限公司基金认购...</a><span><a class="download-icon" target="_blank" href="downloadContentFile_195400972460.jhtml">&nbsp;</a><span>2020-05-21</span></span></div></div>
+	    <div id="dyPagination"><div class="page-turn">
+			<div>
+			<span>第<span class="page-now">1</span>页</span>/
+			<span>共<span class="page-all">17</span>页</span>
+		</div>
+         <a class="page-unclick">&lt;&nbsp;第一页</a>
+         <a class="page-unclick">上一页</a>
+         <a href="javascript:void(0);" class="page-click" onclick="toPage(2);"> 下一页</a>
+         <a href="javascript:void(0);" class="page-click" onclick="toPage(17);">最后一页&nbsp;&gt;</a>
+        <div>第&nbsp;<input type="text" id="input_go" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;页</div>
+        <a class="page-click" href="javascript:void(0);" onclick="toPage($('#input_go').val());">GO</a>
+</div>
+</div>
+	</div>
+
+<script type="text/javascript" src="/js/common/contentDetail.js"></script>
+<script type="text/javascript" src="/js/lib/date/datePicker/WdatePicker.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+  </div>
+    <script type="text/javascript">
+    var data = [{"parentId":100118,"channelName":"信息披露","contentNamespace":"/front","channelRule":"left","modelType":"2","staticUrl":null,"channelId":100186,"priority":1,"isLeaf":"true","channelNamespace":"/front"},{"parentId":100118,"channelName":"媒体报道","contentNamespace":"/front","channelRule":"left","modelType":"2","staticUrl":null,"channelId":100187,"priority":2,"isLeaf":"true","channelNamespace":"/front"},{"parentId":100118,"channelName":"投资者适当性","contentNamespace":"/front","channelRule":"left","modelType":"2","staticUrl":null,"channelId":160357,"priority":4,"isLeaf":"true","channelNamespace":"/front"},{"parentId":100118,"channelName":"投资者教育","contentNamespace":"/front","channelRule":"left","modelType":"2","staticUrl":null,"channelId":100345,"priority":4,"isLeaf":"false","channelNamespace":"/front"}];
+    var currentId = 100186;
+    var currentChannel='100118';
+    var lightChanels=[];
+    var dyAction='.jhtml';
+    $(function(){
+      getLightMenu(data,lightChanels,currentId);
+      initMenu();
+
+      function initMenu(){
+	    for(var i=0;i<data.length;i++){
+	      var obj = data[i];
+	      if(obj.parentId == currentChannel){
+	           $("#dyLeftTree").append(getMenu(0,obj,currentChannel));
+	           showChild(60,data,obj.channelId);
+	       }
+	    }
+	    showAllEnableMenu();
+	    showAllBortherNode(currentId);
+	  }
+
+	 function getLightMenu(data,lightChanels,lightChannelId){
+		  for(var i=0;i<data.length;i++){
+		      var obj = data[i];
+		      if(obj.channelId == lightChannelId){
+		          lightChanels.push(obj.channelId);
+		          getLightMenu(data,lightChanels,obj.parentId);
+		       }
+		    }
+	 }
+
+
+    function getMenu(marginLeft,obj,parentId){
+             var html ='';
+            if(obj.modelType !=4){
+             if(obj.staticUrl && obj.staticUrl!=""){
+                html +='<a  href="'+obj.staticUrl+'"';
+             }
+             else{
+                html +='<a  href="'+obj.channelNamespace+'/'+obj.channelRule+'_'+obj.channelId+dyAction+'"';
+
+             }
+            }else{
+                  html +='<a  target="_blank" href="'+obj.channelLink+'"';
+            }
+             for(var i=0;i<lightChanels.length;i++){
+              if(lightChanels[i] == obj.channelId){
+              	var len = obj.channelName.length;
+              	if(len<5)
+                 	html +=' class="active"';
+                 else if(len<6)
+                 	html +=' class="active5"';
+                 else if(len<7)
+                 	html +=' class="active6"';
+                 else if(len<8)
+                 	html +=' class="active7"';
+                 else
+                 	html +=' class="active8"';
+               }
+             }
+             html+='>';
+             html+=obj.channelName+'</a>';
+             return html;
+         }
+
+        function getChildMenu(marginLeft,obj,parentId){
+            var className = "ItemLevel";
+            var hrefClassName="";
+            var displayStyle = "none";
+            if(obj.isLeaf=="false"){
+               if(currentId == obj.channelId){
+                  className = "currentItem";
+               }else{
+                 hrefClassName="hasChild";
+                 className = "ItemLevel";
+               }
+            }else{
+               hrefClassName="";
+            }
+             var html ='<div pid="'+obj.parentId+'" cid="'+obj.channelId+'" class="'+className+'" style="display:none;" >';
+            if(obj.modelType !=4){
+	                  if(obj.staticUrl && obj.staticUrl!=""){
+	                    html +='<a href="'+obj.staticUrl+'"';
+		               }
+		               else{
+		                 html +='<a href="/front/'+obj.channelRule+'_'+obj.channelId+dyAction+'"';
+		              }
+            }
+            else{
+                 html +='<a href="'+obj.channelLink+'" target="_blank"';
+            }
+            var exists = false;
+            for(var i=0;i<lightChanels.length;i++){
+              if(lightChanels[i] == obj.channelId){
+                 exists=true;
+                 html +=' class="menu-left1-current"';
+               }
+             }
+             if(!exists && hrefClassName!=""){
+               html +='class="'+hrefClassName+'"';
+             }
+             html+='>';
+             html+=obj.channelName+'</a>';
+             html+='</div>';
+             return html;
+         }
+
+      function showChild(left,data,channelId){
+          var left=left+10;
+          var exists=false;
+          for(var i=0;i<data.length;i++){
+	      var obj = data[i];
+	      if(obj.parentId == channelId){
+	         $("#dyLeftTree").append(getChildMenu(left,obj,obj.parentId));
+	         showChild(left,data,obj.channelId);
+	       }
+	    }
+
+      }
+
+      function showAllEnableMenu(){
+         var objs = $("#dyLeftTree").find("div[pid="+currentId+"]");//子节点显示
+         if(objs && objs.length>0){
+             $.each(objs,function(index,obj){
+                 $(obj).css("display","block");
+             })
+         }
+      }
+
+      function showAllBortherNode(nodeId){
+           var objs = $("#dyLeftTree").find("div[cid="+nodeId+"]");
+           if(objs && objs.length>0){
+             $.each(objs,function(index,obj){
+                if($(obj).attr('pid')!=currentChannel){
+                 $(obj).css("display","block");
+                   var tempObjs = $("#dyLeftTree").find("div[pid="+$(obj).attr('pid')+"]");
+                     $.each(tempObjs,function(index,temp){
+                       $(temp).css("display","block");
+                  })
+                  showAllBortherNode($(objs[0]).attr("pid"));
+                 }
+             })
+           }
+      }
+
+
+    })
+    </script>
+        <!--body结束-->
+
+<!--footer-->
+	<div class="footer-box">
+	  <div class="footer">
+	    <div class="link-box">
+	      <div style="margin-top:17px;margin-left:0">
+				<a title="深圳市市场监督管理局企业主体身份公示" alt="深圳市市场监督管理局企业主体身份公示" href="https://sz.ebs.org.cn/home/search?parameter=%E6%81%92%E7%94%9F%E5%89%8D%E6%B5%B7%E5%9F%BA%E9%87%91%E7%AE%A1%E7%90%86%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8" target="_blank" rel="nofollow me noopener noreferrer">
+							<img src="/img/govIcon.gif" width="37" height="51">
+				</a>
+				</div>
+	      <div>
+	        <div>
+
+			  <a href="common_100331.jhtml">反洗钱</a>
+	          <span>|</span>
+	          <a href="common_100336.jhtml">投资人权益须知</a>
+	          <span>|</span>
+	          <a href="common_100337.jhtml">风险提示</a>
+	          <span>|</span>
+	          <a href="common_100338.jhtml">免责声明</a>
+	        </div>
+	        <div>
+		        <span>&nbsp;公司总机：&nbsp;&nbsp;(86)0755-88982200</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        <span>传真：&nbsp;&nbsp;(86)0755-88982169</span></div>
+		        <div><span>&nbsp;公司地址：&nbsp;&nbsp;深圳市福田区中心四路1号嘉里建设广场第三座9楼903-904室</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	        </div>
+	        <div>
+
+				&nbsp;友情链接：
+					<a href="http://www.pbc.gov.cn/" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" target="_blank" rel="nofollow me noopener noreferrer">中国人民银行</a>
+						<span>|</span>
+					<a href="http://www.csrc.gov.cn/" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" target="_blank" rel="nofollow me noopener noreferrer">中国证监会</a>
+						<span>|</span>
+					<a href="http://www.amac.org.cn/" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" target="_blank" rel="nofollow me noopener noreferrer">中国基金业协会</a>
+						<span>|</span>
+					<a href="http://www.hangseng.com.cn" title="您将通过此链接转至恒生银行集团其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" target="_blank" rel="nofollow me noopener noreferrer">恒生银行(中国)</a>
+						<span>|</span>
+					<a href="http://qfhchina.com/" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" target="_blank" rel="nofollow me noopener noreferrer">前海金融控股</a>
+						<span>|</span>
+					<a href="http://www.szqh.gov.cn/" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" target="_blank" rel="nofollow me noopener noreferrer">前海管理局</a>
+
+	        </div>
+        	<div>
+        		<span>&nbsp;恒生前海基金管理有限公司&nbsp;&nbsp;版权所有(C)2020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://beian.miit.gov.cn" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款" target="_blank" rel="nofollow me noopener noreferrer">备案号: 粤ICP备16079073号</a>
+        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 		<a target="_blank" rel="nofollow me noopener noreferrer" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502000492" title="您将通过此链接转至其他网站。恒生前海基金管理有限公司网站与该等链接网站的细则及条款可能互有差异，故请仔细阅读该等链接网站的细则及条款。" style="display:inline-block;text-decoration:none;"><img src="/img/index_gwab.png" style="margin:0 6px; vertical-align:middle">粤公网安备 44030502000492号</a>
+		 		</span>
+        	</div>
+	      </div>
+	    </div>
+	    <div class="fz-s fc-grey02" style="margin-top:0px;">本网站支持IPV6 | 本网站所有资讯与说明文字仅供参考，如有与本公司相关公告及基金法律文件不符，请以相关公告及基金法律文件为准。</div>
+	    <a style="position: absolute;right:0px;bottom:0px;" href="http://www.hsbc.com/" title="此链接可引致阁下进入其他汇丰集团成员之网站。请仔细阅读连接至其他网站之章则，因为该等网站之章则可能跟恒生前海基金管理有限公司网站之章则不相同。" target="_blank" rel="nofollow me noopener noreferrer"><img src="../img/footer_img03.png"></a>
+	  </div>
+	</div>
+   <script type="text/javascript" src="/js/lib/page.js"></script>
+   <script type="text/javascript">
+     $("#keyword").change(function(){
+      var temp = $("#keyword").val();//获取值
+      temp1=temp.replace(/\'/g,"").replace(/\"/g,"").replace(/\>/g,"").replace(/\</g,"").replace(/\\/g,"").replace(/\//g,"");
+      $(this).val(temp1);
+     });
+
+   	$("#serachButton").click(function(){  	
+	$("#form-search").submit();
+	});
+	</script>
+
+<script>var contentImgList = "", currentChannelName = "信息披露";</script>
+</body></html>

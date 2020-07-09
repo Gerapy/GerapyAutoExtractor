@@ -65,7 +65,7 @@ def selector(element: Element):
         return ''
     p = parent(element)
     if p is not None:
-        return selector(p) + '>' + element.alias
+        return selector(p) + '>' + alias(element)
     return element.alias
 
 
@@ -96,7 +96,7 @@ def path(element: Element):
     result = path_raw(element)
     # get nth-child
     nth = len(list(element.itersiblings(preceding=True))) + 1
-    result += f':nth-child({nth})' if nth != 1 else ''
+    result += f':nth-child({nth})'
     return result
 
 
@@ -206,6 +206,9 @@ def alias(element: Element):
     if element is None:
         return ''
     tag = element.tag
+    # skip nth-child
+    if tag in ['html', 'body']:
+        return tag
     attribs = [tag]
     for k, v in element.attrib.items():
         k, v = re.sub(r'\s*', '', k), re.sub(r'\s*', '', v)
@@ -213,7 +216,7 @@ def alias(element: Element):
     result = ''.join(attribs)
     # get nth-child
     nth = len(list(element.itersiblings(preceding=True))) + 1
-    result += f'::nth-child({nth})' if nth != 1 else ''
+    result += f':nth-child({nth})'
     return result
 
 

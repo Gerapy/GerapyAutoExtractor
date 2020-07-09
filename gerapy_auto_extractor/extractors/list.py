@@ -1,9 +1,9 @@
-import itertools
 import math
 import operator
 from loguru import logger
 import numpy as np
 from collections import defaultdict
+from urllib.parse import urljoin
 from gerapy_auto_extractor.utils.cluster import cluster_dict
 from gerapy_auto_extractor.utils.preprocess import preprocess4list
 from gerapy_auto_extractor.extractors.base import BaseExtractor
@@ -12,7 +12,7 @@ from gerapy_auto_extractor.schemas.element import Element
 
 LIST_MIN_NUMBER = 5
 LIST_MIN_LENGTH = 8
-LIST_MAX_LENGTH = 35
+LIST_MAX_LENGTH = 44
 SIMILARITY_THRESHOLD = 0.8
 
 
@@ -81,41 +81,89 @@ class ListExtractor(BaseExtractor):
         clusters = cluster_dict(descendants_tree)
         return clusters
     
-    def _choose_best_cluster(self, clusters):
+    def _evaluate_cluster(self, cluster):
+        """
+        calculate score of cluster using similarity, numbers, or other info
+        :param cluster:
+        :return:
+        """
+        score = dict()
+        
+        # calculate avg_similarity_with_siblings
+        score['avg_similarity_with_siblings'] = np.mean(
+            [element.similarity_with_siblings for element in cluster])
+        
+        # calculate number of elements
+        score['number_of_elements'] = len(cluster)
+        
+        # calculate probability of it contains title
+        # score['probability_of_title_with_length'] = np.mean([
+        #     self._probability_of_title_with_length(len(a_descendant.text)) \
+        #     for a_descendant in itertools.chain(*[element.a_descendants for element in cluster]) \
+        #     ])
+        
+        # TODO: add more quota to select best cluster
+        score['clusters_score'] = \
+            score['avg_similarity_with_siblings'] \
+            * np.log10(score['number_of_elements'] + 1) \
+            # * clusters_score[cluster_id]['probability_of_title_with_length']
+        return score
+    
+    def _extend_cluster(self, cluster):
+        """
+        extend cluster's elements except for missed children
+        :param cluster:
+        :return:
+        """
+        result = [element.selector for element in cluster]
+        for element in cluster:
+            path_raw = element.path_raw
+            siblings = list(element.siblings)
+            for sibling in siblings:
+                # skip invalid element
+                if not isinstance(sibling, Element):
+                    continue
+                sibling_selector = sibling.selector
+                sibling_path_raw = sibling.path_raw
+                if sibling_path_raw != path_raw:
+                    continue
+                # add missed sibling
+                if sibling_selector not in result:
+                    cluster.append(sibling)
+                    result.append(sibling_selector)
+        
+        cluster = sorted(cluster, key=lambda x: x.nth)
+        logger.log('inspect', f'cluster after extend {cluster}')
+        return cluster
+    
+    def _best_cluster(self, clusters):
         """
         use clustering algorithm to choose best cluster from candidate clusters
         :param clusters:
         :return:
         """
+        if not clusters:
+            logger.log('inspect', 'there is on cluster, just return empty result')
+            return []
+        if len(clusters) == 1:
+            logger.log('inspect', 'there is only one cluster, just return first cluster')
+            return clusters[0]
         # choose best cluster using score
         clusters_score = defaultdict(dict)
         clusters_score_arg_max = 0
         clusters_score_max = -1
         for cluster_id, cluster in clusters.items():
             # calculate avg_similarity_with_siblings
-            clusters_score[cluster_id]['avg_similarity_with_siblings'] = np.mean(
-                [element.similarity_with_siblings for element in cluster])
-            # calculate number of elements
-            clusters_score[cluster_id]['number_of_elements'] = len(cluster)
-            # calculate probability of it contains title
-            # clusters_score[cluster_id]['probability_of_title_with_length'] = np.mean([
-            #     self._probability_of_title_with_length(len(a_descendant.text)) \
-            #     for a_descendant in itertools.chain(*[element.a_descendants for element in cluster]) \
-            #     ])
-            # TODO: add more quota to select best cluster
-            clusters_score[cluster_id]['clusters_score'] = \
-                clusters_score[cluster_id]['avg_similarity_with_siblings'] \
-                * np.log10(clusters_score[cluster_id]['number_of_elements'] + 1) \
-                # * clusters_score[cluster_id]['probability_of_title_with_length']
+            clusters_score[cluster_id] = self._evaluate_cluster(cluster)
             # get max score arg index
             if clusters_score[cluster_id]['clusters_score'] > clusters_score_max:
                 clusters_score_max = clusters_score[cluster_id]['clusters_score']
                 clusters_score_arg_max = cluster_id
-        logger.debug(f'clusters_score {clusters_score}')
+        logger.log('inspect', f'clusters_score {clusters_score}')
         best_cluster = clusters[clusters_score_arg_max]
         return best_cluster
     
-    def _extract_from_cluster(self, cluster):
+    def _extract_cluster(self, cluster):
         """
         extract title and href from best cluster
         :param cluster:
@@ -133,10 +181,11 @@ class ListExtractor(BaseExtractor):
                 # TODO: add more quota to calculate probability_of_title
                 probability_of_title = probability_of_title_with_length
                 probabilities_of_title[path].append(probability_of_title)
+        
         # get most probable tag_path
         probabilities_of_title_avg = {k: np.mean(v) for k, v in probabilities_of_title.items()}
         best_path = max(probabilities_of_title_avg.items(), key=operator.itemgetter(1))[0]
-        logger.debug(f'best tag path {best_path}')
+        logger.log('inspect', f'best tag path {best_path}')
         
         # extract according to best tag path
         result = []
@@ -152,6 +201,9 @@ class ListExtractor(BaseExtractor):
                     continue
                 if url.startswith('//'):
                     url = 'http:' + url
+                base_url = self.kwargs.get('base_url')
+                if base_url:
+                    url = urljoin(base_url, url)
                 result.append({
                     'title': title,
                     'url': url
@@ -169,20 +221,25 @@ class ListExtractor(BaseExtractor):
         
         # build clusters
         clusters = self._build_clusters(element)
+        logger.log('inspect', f'after build clusters {clusters}')
         
         # choose best cluster
-        best_cluster = self._choose_best_cluster(clusters)
+        best_cluster = self._best_cluster(clusters)
+        logger.log('inspect', f'best cluster {best_cluster}')
+        
+        extended_cluster = self._extend_cluster(best_cluster)
+        logger.log('inspect', f'extended cluster {extended_cluster}')
         
         # extract result from best cluster
-        return self._extract_from_cluster(best_cluster)
+        return self._extract_cluster(best_cluster)
 
 
 list_extractor = ListExtractor()
 
 
-def extract_list(html):
+def extract_list(html, **kwargs):
     """
     extract list from index html
     :return:
     """
-    return list_extractor.extract(html)
+    return list_extractor.extract(html, **kwargs)

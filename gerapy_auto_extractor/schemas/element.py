@@ -47,6 +47,15 @@ class Element(HtmlElement):
         return self._id
     
     @property
+    def nth(self):
+        """
+        get nth index of this element in parent element
+        :return:
+        """
+        return len(list(self.itersiblings(preceding=True))) + 1
+    
+    
+    @property
     def alias(self):
         """
         get alias of element, using all attributes to construct it.
@@ -79,7 +88,7 @@ class Element(HtmlElement):
         if self._children is not None:
             return self._children
         from gerapy_auto_extractor.utils.element import children
-        self._children = children(self)
+        self._children = list(children(self))
         return self._children
     
     @property
@@ -91,7 +100,7 @@ class Element(HtmlElement):
         if self._siblings is not None:
             return self._siblings
         from gerapy_auto_extractor.utils.element import siblings
-        self._siblings = siblings(self)
+        self._siblings = list(siblings(self))
         return self._siblings
     
     @property
@@ -103,7 +112,7 @@ class Element(HtmlElement):
         if self._descendants is not None:
             return self._descendants
         from gerapy_auto_extractor.utils.element import descendants
-        self._descendants = descendants(self)
+        self._descendants = list(descendants(self))
         return self._descendants
     
     @property
@@ -384,3 +393,17 @@ class Element(HtmlElement):
         values = self.a_descendants_group_text_length.values()
         self._a_descendants_group_text_max_length = max(values) if values else 0
         return self._a_descendants_group_text_max_length
+    
+    def __str__(self):
+        """
+        rewrite str
+        :return:
+        """
+        return f'<Element {self.tag} of {self.path}>'
+    
+    def __repr__(self):
+        """
+        rewrite repr
+        :return:
+        """
+        return self.__str__()

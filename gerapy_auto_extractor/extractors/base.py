@@ -3,10 +3,13 @@ from loguru import logger
 from lxml.html import HtmlElement, etree
 from gerapy_auto_extractor.schemas.element import Element
 
+
 class BaseExtractor(object):
     """
     Base Extractor which provide common methods
     """
+    
+    kwargs = None
     
     def to_string(self, element: Element, limit: int = None):
         """
@@ -29,13 +32,14 @@ class BaseExtractor(object):
         logger.error('You must implement process method in your extractor.')
         raise NotImplementedError
     
-    def extract(self, html):
+    def extract(self, html, **kwargs):
         """
         base extract method, firstly, it will convert html to WebElement, then it call
         process method that child class implements
         :param html:
         :return:
         """
+        self.kwargs = kwargs
         element = fromstring(html=html)
         element.__class__ = Element
         return self.process(element)

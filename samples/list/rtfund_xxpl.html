@@ -1,0 +1,544 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<!--[if lte IE 8]>
+    <script type="text/javascript">
+        window.location.href = 'http://www.rtfund.com/killie/index.html';
+    </script>
+<![endif]-->
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="Keywords" content="融通基金信息披露,公司公告,基金定期公告,基金临时公告,发行文件">
+<meta name="Description" content="融通基金产品相关公告信息权威发布，包括网站公告，基金定期公告，基金临时公告，发行文件等公告内容。">
+<title>信息披露_融通基金管理有限公司</title>
+
+
+<link href="/front/css/divcontent.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/front/css/css.css">
+<link rel="stylesheet" type="text/css" href="/front/css/ajaxpage.css">
+<!--[if lt IE 9]><script r='m'>document.createElement("section")</script><![endif]--><script src="/front/scripts/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="/front/scripts/jquery/formValidatorRegex.js" type="text/javascript"></script>
+<script src="/front/scripts/jquery/formValidator.js" type="text/javascript"></script>
+<script src="/front/scripts/jquery/jquery.boxy.js" type="text/javascript"></script>
+<script type="text/javascript" src="/front/scripts/common/divcontent.js"></script>
+<script type="text/javascript" src="/front/scripts/common/comm-ref.js"></script>
+<script type="text/javascript" src="/front/scripts/common/common-scripts.js"></script>
+<script type="text/javascript" src="/front/scripts/common.js"></script>
+<script type="text/javascript" src="/front/scripts/common/syncReqJs.js"></script>
+<script type="text/javascript" src="/front/scripts/ajax/ajaxPage.js"></script>
+<script type="text/javascript" src="/front/scripts/ajax/ajax.js"></script>
+<script src="/front/scripts/vue/vue.min.js"></script>
+<script src="/front/scripts/mUtil.js"></script>
+<script src="/front/scripts/vueUtil.js"></script>
+<script src="/main/include/fund.js"></script>
+<script src="/front/scripts/lodash@4.17.4/lodash.min.js"></script>
+<!--[if IE 6]>
+<script src="/front/scripts/jquery/pngAlaph.js" type="text/javascript"></script>
+<script src="/front/scripts/jquery/ie6png.js" type="text/javascript"></script>
+<script>
+	DD_belatedPNG.fix('');
+$(function(){
+			$("#head_1").addClass("on");
+		});
+</script>
+<![endif]-->
+
+</head>
+
+<body style="display: block;">
+	<script>
+        function checkLogin() {
+            ajaxListCall("/servlet/aboutRt/CheckLogin", [], function(data) {
+                if (data != null && data.data.username != null) { //代表用户已经登陆
+                    $("#result5").html("您好，" + "<a href='https://trade.rtfund.com/etrading/page/frame/Frame.html' target='_blank' class='blue'>" + data.data.username + "</a>&nbsp;&nbsp;" +
+                        "<a onclick='javascript:loginOut();' style='cursor:pointer;'>退出</a>"
+                    );
+                    $(".account a:eq(0)")
+                        .attr("href", "https://trade.rtfund.com/etrading/page/frame/Frame.html");
+                    $(".account a:eq(1)")
+                        .attr("href", "https://trade.rtfund.com/etrading/fromSite.action?business=menu08");
+                    $(".account a:eq(2)")
+                        .attr("href", "https://trade.rtfund.com/etrading/fromSite.action?business=menu0601");
+                    $(".account a:eq(3)")
+                        .attr("href", "/main/xw/index.shtml#result2");
+                    queryScore(data.data.certype, data.data.certno);
+                }
+            });
+        }
+        function queryScore(certype, certno) {
+            ajaxListCall("http://wx.rtfund.com/baas2json/scoreapi/queryScoreFromWeb.do", {
+                certype: certype,
+                certno: certno
+            }, function(result) {
+                console.log(result);
+                if (result != null && result) {
+                    $("#result5").append("&nbsp;&nbsp;积分:" + result.scScore);
+                }
+            })
+        }
+
+        function loginOut() {
+            if (window.confirm('您确定要退出吗？')) {
+                ajaxListCallNotJson("/servlet/aboutRt/CheckLogin?function=LoginOut", "", "");
+                //checkLogin();
+                $("#result5").html("<span>" +
+                    "请<a href='https://trade.rtfund.com/etrading/' class='blue' target='_blank'>登录</a>" +
+                    "</span><span>" +
+                    "<a href='https://trade.rtfund.com/etrading/page/frame/MainFrame.html?type=1' class='blue' target='_blank'>免费开户</a>" +
+                    "</span>"
+                );
+                $(".account a:eq(0)")
+                    .attr("href", "https://trade.rtfund.com/etrading/");
+                $(".account a:eq(1)")
+                    .attr("href", "https://trade.rtfund.com/etrading/");
+                $(".account a:eq(2)")
+                    .attr("href", "https://trade.rtfund.com/etrading/");
+                $(".account a:eq(3)")
+                    .attr("href", "/main/xw/index.shtml#result2");
+            }
+        }
+        function checkvalid() {
+             var searchstr = window.location.search;
+             if (searchstr.search(/script/i) > 0) {
+                 window.location.href = window.location.pathname
+             }
+        }
+        $(function() {
+            checkLogin();
+            checkvalid();
+        });
+        //点击劫持
+        if (self == top) {
+            var theBody = document.getElementsByTagName('body')[0];
+            theBody.style.display = "block";
+        } else {
+            top.location = self.location;
+        }
+        </script>
+        <div class="header">
+            <div class="header_in_box">
+                <div class="top_box">
+                    <div class="left_box">
+                        <span>欢迎来到融通基金！</span>
+                        <a href="/main/index/search/index.shtml" target="_blank">
+                                <img style="width:12px;" src="/front/images/search.png">&nbsp;搜索</a>
+
+                    </div>
+                    <div class="right_box">
+                        <ul>
+                            <li>
+                                <span id="result5" style="padding-right:0px;">
+                                <span>
+                                    请<a href="https://trade.rtfund.com/etrading/" class="blue" target="_blank">登录</a>
+                                </span>
+                                <span>
+                                    <a href="https://trade.rtfund.com/etrading/page/frame/MainFrame.html?type=1" class="blue" target="_blank">免费开户</a>
+                                </span>
+                                </span>
+                                <span class="account">
+                                    <a href="https://trade.rtfund.com/etrading/page/frame/Frame.html" target="_blank">账户首页</a>
+                                    <dl>
+                                        <dt>
+                                            <a href="https://trade.rtfund.com/etrading/fromSite.do?business=menu08" target="_blank">我的现金宝</a>
+                                        </dt>
+                                        <dt>
+                                            <a href="https://trade.rtfund.com/etrading/fromSite.do?business=menu0601" target="_blank">交易查询</a>
+                                        </dt>
+                                        <dt>
+                                            <a href="/main/xw/index.shtml#result2" target="_blank">我的提问</a>
+                                        </dt>
+                                    </dl>
+                                </span>
+                            </li>
+                            <li>
+                                <span>
+                                    <a href="https://query.rtfund.com/zhequerying/static/webjs/logon.jsp" target="_blank">专户理财</a>
+                                </span>
+                                <span class="account">
+                                    <a href="/main/gyrt/gsjs/index.shtml" target="_blank">关于融通</a>
+                                    <dl>
+                                        <dt>
+                                            <a href="/main/gyrt/rtdt/index.shtml" target="_blank">公司动态</a>
+                                        </dt>
+                                        <dt>
+                                            <a href="http://www.rtfund.com/website/2020/job/employee/emp_home.html" target="_blank">诚聘英才</a>
+                                        </dt>
+
+                                        <dt>
+                                            <a href="/main/gyrt/lxwm/index.shtml" target="_blank">联系我们</a>
+                                        </dt>
+                                    </dl>
+                                </span>
+
+                                <span class="account">
+                                    <a href="javascript:;" target="_blank">融通旗下</a>
+                                    <dl>
+                                        <dt>
+                                            <a href="http://www.rtcapital.cn" target="_blank">融通资本</a>
+                                        </dt>
+                                        <dt>
+                                            <a href="http://www.global.rtfund.com" target="_blank">融通国际</a>
+                                        </dt>
+
+                                        <dt>
+                                            <a href="/main/About/Overview/index.shtml" target="_blank">English</a>
+                                        </dt>
+                                    </dl>
+                                </span>
+                            </li>
+                            <li class="no_bg">
+                                <span>
+                                    <a href="/main/bzzx/index.shtml" target="_blank">帮助中心</a>
+                                </span>
+                                <span class="last">
+                                    <img src="/front/images/phone_bg.png" width="125" height="29">
+                                </span>
+                            </li>
+                        </ul>
+                        <script>
+                            $(function(){
+                                $(".header_in_box .account").hover(function(){
+                                    $(this).addClass("cur");
+                                },function(){
+                                    $(this).removeClass("cur");
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="logo">
+                    <a href="/main/index.shtml">融通基金</a>
+                </div>
+                <div class="nav">
+                    <ul>
+                                                        <li id="head_index">
+                                    <a id="head_a_index" href="/main/index.shtml">首页</a>
+                                </li>
+                                <li id="head_cashtreasure">
+                                    <a id="head_a_cashtreasure" href="/main/cashtreasure/index.shtml">现金宝<strong class="iNum"><span id="xjb0">[<em>1.809</em>%]</span></strong></a>
+                                </li>
+                                <li id="head_castsurely">
+                                    <a id="head_a_castsurely" href="http://www.rtfund.com/main/castsurely/dtjp/dingtb/index.shtml">定投</a>
+                                </li>
+                                <li id="head_fund">
+                                    <a id="head_a_fund" href="/main/fund/index.shtml">基金产品</a>
+                                </li>
+                                <li id="head_xw">
+                                    <a id="head_a_xw" href="/main/xw/index.shtml">学问</a>
+                                </li>
+                                <li id="head_qylc">
+                                    <a id="head_a_qylc" href="https://trade.rtfund.com/etrading/page/frame/Login.jsp?winvtp=1">企业理财</a>
+                                </li>
+                            <script>$(function(){iNum(1.809,'xjb0') });</script>
+                        <li id="head_jf">
+                            <a target="_blank" href="http://www.rtfund.com/website/2019/vip/index.html">会员中心</a>
+                        </li>
+
+                    </ul>
+            <script>
+				$(function(){
+                    var url = document.location.href;
+                    if(url.indexOf('/main/')==-1 && url.indexOf('/app/')==-1){
+                        $("#head_xw").addClass("on");//默认学问
+                        return;
+                    }
+                    var routers = url.substr(url.indexOf('/main/')+6,url.lastIndexOf('.')-url.indexOf('/main/')-6).split("/");
+                    var catalog = routers[0];
+                    $("#head_" + catalog).addClass("on");
+                });
+            </script>
+
+                </div>
+            </div>
+        </div>
+	<div class="content pt20">
+    	<div class="about_ad mb20">
+        	<img src="/front/images/pic60.jpg">
+        </div>
+		<div class="side_sub fl">
+			<!--子栏目侧栏导航-->
+          	<!--子栏目侧栏导航-->
+<!-- 关于融通左边菜单 -->
+<div class="nav_side_sub02 mb20">
+                <div class="title">
+                    <h2>关于融通</h2>
+                </div>
+               	 <ul class="ul_about">
+				  	<li>
+				  	<a href="/main/gyrt/gsjs/index.shtml">公司介绍</a>
+				  	</li>
+				  	<li>
+				  	<a href="/main/gyrt/zzjg/index.shtml">组织架构</a>
+				  	</li>
+				  	<li>
+				  	<a href="/main/gyrt/jjjl/index.shtml">基金经理</a>
+				  	</li>
+				  	<li>
+				  	<a href="/main/gyrt/gsdsj/index.shtml">公司大事记</a>
+				  	</li>
+				  	<li>
+				  	<a href="/main/gyrt/rtdt/index.shtml">公司动态</a>
+				  	</li>
+				  	<li>
+				  	<a href="/rtaixinzhilv/index.html" target="_blank">公益活动</a>
+				  	</li>
+				  	<li>
+				  	<a href="/main/gyrt/personpub/index.shtml">人员公示</a>
+				  	</li>
+				  	<li class="on">
+				  	<a href="/main/gyrt/xxpl/index.shtml">信息披露</a>
+				  	</li>
+				  	<li>
+				  	<a href="/main/gyrt/lxwm/index.shtml">联系我们</a>
+				  	</li>
+				</ul>
+            </div>
+
+
+
+
+
+            <!--
+            <div class="ad09">
+            	<a href="#">
+                	<img src="/front/images/pic30.jpg" />
+                </a>
+            </div>
+            -->
+
+
+		</div>
+		<div class="main_sub fr">
+			<div class="about_title">
+            	<div class="left_tit fl">
+                	<h2>信息披露</h2><span>Announce</span>
+                </div>
+                <div class="nav_main_sub fr">
+					<p>
+                    	 <a href="/main/index/index.shtml" title="首页">首页</a>&nbsp;&gt;&nbsp;<a href="" title="关于融通">关于融通</a>&nbsp;&gt;&nbsp;<span>信息披露</span>
+                    </p>
+				</div>
+            </div>
+            <div class="about_cont">
+		 <div class="info_hd">
+                	<ul>
+                    	<li class="on">
+                        	<a href="javascript:;" onmouseover="javascript:ajaxList('/servlet/fund/AboutNewsAction?catalogId=2933,2935,2934,2936&amp;style=1&amp;expert=expertList1&amp;divname=paging1','expertList1','');">全部</a>
+                        </li>
+                        <li>
+
+                        	<a href="javascript:;" onmouseover="javascript:ajaxList('/servlet/fund/AboutNewsAction?catalogId=2933&amp;style=1&amp;expert=expertList1&amp;divname=paging1','expertList1','');">公司公告</a>
+                        </li>
+                        <li>
+                        	<a href="javascript:;" onmouseover="javascript:ajaxList('/servlet/fund/AboutNewsAction?catalogId=2935&amp;style=1&amp;expert=expertList1&amp;divname=paging1','expertList1','');">基金定期公告</a>
+                        </li>
+                        <li>
+                        	<a href="javascript:;" onmouseover="javascript:ajaxList('/servlet/fund/AboutNewsAction?catalogId=2934&amp;style=1&amp;expert=expertList1&amp;divname=paging1','expertList1','');">基金临时公告</a>
+                        </li>
+						 <li>
+                        	<a href="javascript:;" onmouseover="javascript:;ajaxList('/servlet/fund/AboutNewsAction?catalogId=2936&amp;style=1&amp;expert=expertList1&amp;divname=paging1','expertList1','');">发行文件</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="info_bd">
+				  <div class="info_ne disblock" id="expertList1">
+                								<ul>
+								<li>
+									<span>2020-07-09 </span>
+									<a href="/main/a/20200709/12323944.shtml" target="_blank">融通关于旗下部分开放式基金新增华瑞保险销售有限公司为销售机构并参加其费率优惠活动的公告</a>
+								</li>
+								<li>
+									<span>2020-07-09 </span>
+									<a href="/main/a/20200709/12323943.shtml" target="_blank">关于融通新趋势灵活配置混合型证券投资基金调整大额申购限制金额的公告</a>
+								</li>
+								<li>
+									<span>2020-07-09 </span>
+									<a href="/main/a/20200709/12323942.shtml" target="_blank">关于融通通慧混合型证券投资基金调整大额申购限制金额的公告</a>
+								</li>
+								<li>
+									<span>2020-07-09 </span>
+									<a href="/main/a/20200709/12323941.shtml" target="_blank">关于融通成长30灵活配置混合型证券投资基金调整大额申购限制金额的公告</a>
+								</li>
+								<li>
+									<span>2020-07-09 </span>
+									<a href="/main/a/20200709/12323035.shtml" target="_blank">融通四季添利债券型证券投资基金（LOF）第三十六次分红公告</a>
+								</li>
+								<li>
+									<span>2020-07-09 </span>
+									<a href="/main/a/20200709/12323034.shtml" target="_blank">融通基金管理有限公司关于调整养老金客户范围的公告</a>
+								</li>
+								<li>
+									<span>2020-07-08 </span>
+									<a href="/main/a/20200708/12323030.shtml" target="_blank">关于融通创业板交易型开放式指数证券投资基金新增网下销售机构的公告</a>
+								</li>
+								<li>
+									<span>2020-07-08 </span>
+									<a href="/main/a/20200708/12323031.shtml" target="_blank">关于融通新消费灵活配置混合型证券投资基金调整大额申购限制金额的公告</a>
+								</li>
+								<li>
+									<span>2020-07-07 </span>
+									<a href="/main/a/20200707/12323024.shtml" target="_blank">融通汇财宝货币市场基金关于新增销售机构的公告</a>
+								</li>
+								<li>
+									<span>2020-07-07 </span>
+									<a href="/main/a/20200707/12323023.shtml" target="_blank">融通关于旗下部分证券投资基金开展直销柜台赎回费率及转换费率优惠活动的公告</a>
+								</li>
+								<li>
+									<span>2020-07-06 </span>
+									<a href="/main/a/20200706/12323021.shtml" target="_blank">融通通益混合型证券投资基金暂停大额申购、转换转入业务的公告</a>
+								</li>
+								<li>
+									<span>2020-07-06 </span>
+									<a href="/main/a/20200706/12323020.shtml" target="_blank">融通岁岁添利定期开放债券型证券投资基金第三十三次分红公告</a>
+								</li>
+								<li>
+									<span>2020-07-06 </span>
+									<a href="/main/a/20200706/12323019.shtml" target="_blank">融通产业趋势股票型证券投资基金在直销柜台开放日常申购业务的公告</a>
+								</li>
+								<li>
+									<span>2020-07-06 </span>
+									<a href="/main/a/20200706/12323018.shtml" target="_blank">融通通源短融债券型证券投资基金B类份额暂停部分销售机构的大额申购、转换转入业务的公告</a>
+								</li>
+								<li>
+									<span>2020-07-06 </span>
+									<a href="/main/a/20200706/12323017.shtml" target="_blank">关于融通通源短融债券型证券投资基金B类新增兴业银行股份有限公司为销售机构的公告</a>
+								</li>
+							</ul>
+					<div class="wbPaging" id="paging1"><strong class="green">15</strong>条/页，第<strong class="red">1/436</strong>页　　<span class="prev">上一页</span>　<a href="javascript:void(0);" class="on">1</a><a href="javascript:void(0);" onclick="executePage(2,15,&quot;/servlet/fund/AboutNewsAction?catalogId=2933,2935,2934,2936&amp;style=1&amp;expert=expertList1&amp;divname=paging1&quot;,&quot;expertList1&quot;,&quot;1&quot;,&quot;&quot;,&quot;false&quot;);">2</a><a href="javascript:void(0);" onclick="executePage(3,15,&quot;/servlet/fund/AboutNewsAction?catalogId=2933,2935,2934,2936&amp;style=1&amp;expert=expertList1&amp;divname=paging1&quot;,&quot;expertList1&quot;,&quot;1&quot;,&quot;&quot;,&quot;false&quot;);">3</a><span>…</span><a href="javascript:void(0);" onclick="executePage(436,15,&quot;/servlet/fund/AboutNewsAction?catalogId=2933,2935,2934,2936&amp;style=1&amp;expert=expertList1&amp;divname=paging1&quot;,&quot;expertList1&quot;,&quot;1&quot;,&quot;&quot;,&quot;false&quot;);">436</a>　<a href="javascript:void(0);" class="next" onclick="executePage(2,15,&quot;/servlet/fund/AboutNewsAction?catalogId=2933,2935,2934,2936&amp;style=1&amp;expert=expertList1&amp;divname=paging1&quot;,&quot;expertList1&quot;,&quot;1&quot;,&quot;&quot;);">下一页</a><span class="numTxt">&nbsp;</span><input name="jump" type="text" class="pagenum" maxlength="4"><span></span><a class="btngo" style="cursor:pointer" href="javascript:void(0);">跳转</a></div>
+					 <script type="text/javascript">
+						$("#paging1").getLinkStr({
+									pagecount:436,
+									curPage:1,
+									numPerPage:15,
+							isShowJump:true,
+							ajaxRequestPath:"/servlet/fund/AboutNewsAction?catalogId=2933,2935,2934,2936&style=1&expert=expertList1&divname=paging1",
+							divId:'expertList1'});
+					</script>
+
+					</div>
+
+                </div>
+
+                <script>
+					$(".info_hd ul li").each(function(i){
+						$(this).mouseover(function(){
+							$(this).addClass("on").siblings().removeClass("on");
+							$(".info_bd .info_ne").eq(i).addClass("disblock").siblings().removeClass("disblock");
+						});
+					});
+				</script>
+            </div>
+		</div>
+	</div>
+	<!-- footer start -->
+   	<script type="text/javascript">
+	var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F58161848835e9d5478f3fa8c8f9bc0f1' type='text/javascript'%3E%3C/script%3E"));
+</script><script src=" http://hm.baidu.com/h.js?58161848835e9d5478f3fa8c8f9bc0f1" type="text/javascript"></script>
+<div class="footer_link mt30">
+	<div class="footer_link_in">
+		<div class="link_map fl">
+			<div class="ul_box">
+				<h2>新手指南</h2>
+				<ul>
+					<li>
+						<a href="/main/bzzx/xssr/khzn/index.shtml" target="_blank">个人开户</a>
+					</li>
+					<li>
+						<a href="/servlet/lore/LoreAction?article_id=12309194" target="_blank">企业开户</a>
+					</li>
+					<li>
+						<a href="/main/bzzx/xssr/gmjjlc/index.shtml" target="_blank">交易指引</a>
+					</li>
+					<li>
+						<a href="/servlet/lore/LoreAction?function=loreTypeList&amp;parentId=2972&amp;catalogId=0" target="_blank">基金知识</a>
+					</li>
+
+				</ul>
+			</div>
+			<div class="ul_box">
+				<h2>交易须知</h2>
+				<ul>
+
+					<li>
+						<a href="/servlet/lore/LoreAction?catalogId=3110&amp;function=loreTypeList" target="_blank">政策法规</a>
+					</li>
+					<li>
+						<a href="/main/bzzx/tzzjy/fxts/index.shtml" target="_blank">风险提示</a>
+					</li>
+					<li>
+						<a href="/servlet/lore/LoreAction?catalogId=3159&amp;function=loreTypeList" target="_blank">业务规则</a>
+					</li>
+                  <li>
+						<a href="/main/bzzx/tzzjy/jjtzrqyxz/index.shtml" target="_blank">投资者教育</a>
+					</li>
+				</ul>
+			</div>
+			<div class="ul_box">
+				<h2>客户服务</h2>
+				<ul>
+					<li>
+						<a href="/servlet/lore/LoreAction?function=loreTypeList&amp;parentId=2973&amp;catalogId=0" target="_blank">常见问题</a>
+					</li>
+					<li>
+						<a href="/main/bzzx/cyzzfw/index.shtml" target="_blank">自助大厅</a>
+					</li>
+					<li>
+						<a href="/main/bzzx/xzzq/index.shtml" target="_blank">单据下载</a>
+					</li>
+					<li>
+						<a href="/main/bzzx/fwjs/yylc/index.shtml" target="_blank">语言流程</a>
+					</li>
+					<li>
+						<a href="/main/bzzx/tsyjt/index.shtml" target="_blank">意见反馈</a>
+					</li>
+				</ul>
+			</div>
+			<div class="ul_box">
+				<h2>关于融通</h2>
+				<ul>
+					<li>
+						<a href="/main/gyrt/gsjs/index.shtml" target="_blank">公司介绍</a>
+					</li>
+
+					<li>
+						<a href="/main/gyrt/jjjl/index.shtml" target="_blank">基金经理</a>
+					</li>
+					<li>
+						<a href="/main/gyrt/gsdsj/index.shtml" target="_blank">公司大事记</a>
+					</li>
+					<li>
+						<a href="/main/gyrt/lxwm/index.shtml" target="_blank">联系我们</a>
+					</li>
+					<li>
+						<a href="http://www.rtfund.com/website/2020/job/employee/emp_home.html" target="_blank">诚聘英才</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="footer-qr">
+			<ul class="footer-qr_tab" id="footerQrTab">
+				<li class="icon-app" style="padding-right:60px;" data-target="#footerAppQr">&nbsp;&nbsp;&nbsp;&nbsp;官方APP<br><br><img class="footer-qr_img" id="footerAppQr" src="/front/images/app_qr_code.png"></li>
+				<li class="icon-wx" data-target="#footerWechatQr">&nbsp;&nbsp;&nbsp;&nbsp;官方微信<br><br><img class="footer-qr_img" id="footerAppQr" src="/front/images/wechat_qr_code.png"></li>
+			</ul>
+		</div>
+
+	</div>
+</div>
+<div class="footer_copyright">
+	<div class="footer_copyright_in">
+		<div class="txt_box01">
+<p><a href="/main/bzzx/tzzjy/jjtzrqyxz/index.shtml" target="_blank" style="padding-left:0px">投资者权益须知</a>|<a href="/main/bzzx/tzzjy/fxts/index.shtml" target="_blank">风险提示</a>|<a href="/main/index/search/index.shtml?keywords=%E5%8F%8D%E6%B4%97%E9%92%B1" target="_blank">反洗钱</a>|<a href="/main/index/search/index.shtml?keywords=%E9%98%B2%E8%8C%83%E9%9D%9E%E6%B3%95%E8%AF%81%E5%88%B8%E6%B4%BB%E5%8A%A8" target="_blank">防范证券欺诈活动</a>|<a href="/main/bzzx/tzzjy/yssm/index.shtml" target="_blank">免责申明</a>|<a href="/main/bzzx/tsyjt/index.shtml" target="_blank">意见与建议</a>|<a href="/main/gyrt/lxwm/index.shtml" target="_blank">联系我们</a>|<a href="/main/gyrt/cpyc/index.shtml" target="_blank">诚聘英才</a>|<a href="/main/index/yqlj/index.shtml" target="_blank">友情链接</a>|<a href="/main/index/wzdt/index.shtml" target="_blank">网站地图</a></p>
+			<p> 融通基金管理有限公司 <a href="http://beian.miit.gov.cn" target="_blank" style="text-decoration: underline;color: #b4bcc7;">粤ICP备11027090号</a> 本网站支持IPv6</p>
+			<p style="color:#FFFFFF">提示：网站所有内容仅供参考，具体以相关公告及基金法律文件为准。市场有风险，投资需谨慎。</p>
+		</div>
+		<div class="pic_box">
+												<a href="http://61.144.227.239:9002/" target="_blank"><img src="/front/images/icon20.png"></a>
+			<a href1="http://61.144.227.239:9003/webrecord/form_query.jsp" target="_blank"><img src="/front/images/icon19.png"></a>
+			<a href="http://szcert.ebs.org.cn/004b4e13-b4e2-4402-b09f-33ceed7cb270" title="深圳市市场监督管理局企业主体身份公示" alt="深圳市市场监督管理局企业主体身份公示" target="_blank"><img src="/front/images/gongshangwangjian.png"></a>
+		</div>
+	</div>
+</div>
+   	<!-- footer end -->
+
+
+</body></html>
