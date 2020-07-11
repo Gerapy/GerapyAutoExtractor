@@ -1,0 +1,1 @@
+include gerapy_auto_extractor/classifiers/models/*.pkl

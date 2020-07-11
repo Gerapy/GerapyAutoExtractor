@@ -30,12 +30,18 @@ class TitleExtractor(BaseExtractor):
     
     def extract_by_h(self, element: HtmlElement):
         """
-        extract by h tag
+        extract by h tag, priority h1, h2, h3
         :param elemeent:
         :return:
         """
-        return ''.join(
-            element.xpath('(//h1//text() | //h2//text() | //h3//text())')).strip()
+        for xpath in ['//h1', '//h2', '//h3']:
+            children = element.xpath(xpath)
+            if not children:
+                continue
+            child = children[0]
+            texts = child.xpath('./text()')
+            if texts and len(texts):
+                return texts[0].strip()
     
     def process(self, element: HtmlElement):
         """

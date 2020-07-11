@@ -1,7 +1,7 @@
 import re
 from dateparser import parse
 from lxml.html import HtmlElement
-from gerapy_auto_extractor.patterns.datetime import METAS, REGEXES
+from gerapy_auto_extractor.patterns.datetime import METAS_CONTENT, REGEXES
 from loguru import logger
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 
@@ -29,7 +29,7 @@ class DatetimeExtractor(BaseExtractor):
         :param element:
         :return: str
         """
-        for xpath in METAS:
+        for xpath in METAS_CONTENT:
             datetime = element.xpath(xpath)
             if datetime:
                 return ''.join(datetime)

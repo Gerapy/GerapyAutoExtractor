@@ -145,3 +145,5 @@ cython_debug/
 .idea/
 
 result.*
+
+datasets/

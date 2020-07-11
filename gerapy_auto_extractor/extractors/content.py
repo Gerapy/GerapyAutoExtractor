@@ -1,6 +1,6 @@
 import numpy as np
 from gerapy_auto_extractor.schemas.element import Element
-from gerapy_auto_extractor.utils.preprocess import preprocess4content
+from gerapy_auto_extractor.utils.preprocess import preprocess4content_extractor
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 from gerapy_auto_extractor.utils.element import descendants_of_body
 
@@ -17,7 +17,7 @@ class ContentExtractor(BaseExtractor):
         :return:
         """
         # preprocess
-        preprocess4content(element)
+        preprocess4content_extractor(element)
         
         # start to evaluate every child element
         element_infos = []

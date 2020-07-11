@@ -1,10 +1,11 @@
+import re
+import numpy as np
+from os.path import exists
 from types import ModuleType
 from collections import defaultdict
+from loguru import logger
 from lxml.html import fromstring, HtmlElement
-from numpy import mean
 from gerapy_auto_extractor.schemas.element import Element
-import re
-
 from gerapy_auto_extractor.utils.similarity import similarity
 
 PUNCTUATION = set('''！，。？、；：“”‘’《》%（）<>{}「」【】*～`,.?:;'"!%()''')
@@ -52,6 +53,18 @@ def html2element(html: str):
     element = fromstring(html)
     element.__class__ = Element
     return element
+
+
+def file2element(file_path):
+    """
+    convert file to element
+    :param file_path:
+    :return:
+    """
+    if not exists(file_path):
+        return
+    with open(file_path, encoding='utf-8') as f:
+        return html2element(f.read())
 
 
 def selector(element: Element):
@@ -271,6 +284,8 @@ def number_of_char(element: Element):
     :param element:
     :return: length
     """
+    if element is None:
+        return 0
     return len(text(element))
 
 
@@ -287,15 +302,48 @@ def number_of_a_char(element: Element):
     return len(text)
 
 
+def number_of_a_char_log10(element: Element):
+    """
+    get number of linked char, to log10
+    :param element:
+    :return: length
+    """
+    if element is None:
+        return 0
+    return np.log10(number_of_a_char(element) + 1)
+
+
+def number_of_p_children(element: Element):
+    """
+    get number of p tags in children
+    :param element:
+    :return:
+    """
+    if element is None:
+        return 0
+    return len(element.xpath('./p'))
+
+
 def number_of_p_descendants(element: Element):
     """
-    get number of p tags
+    get number of p tags in descendants
     :param element:
     :return:
     """
     if element is None:
         return 0
     return len(element.xpath('.//p'))
+
+
+def number_of_p_descendants_log10(element: Element):
+    """
+    get number of p tags, to log10
+    :param element:
+    :return:
+    """
+    if element is None:
+        return 0
+    return np.log10(number_of_p_descendants(element))
 
 
 def number_of_a_descendants(element: Element):
@@ -344,6 +392,40 @@ def number_of_siblings(element: Element):
     if element is None:
         return 0
     return len(list(siblings(element, including=False)))
+
+
+def number_of_clusters(element: Element, tags=None):
+    """
+    get number of clusters
+    :param element:
+    :return:
+    """
+    from gerapy_auto_extractor.extractors.list import LIST_MIN_NUMBER, LIST_MAX_LENGTH, LIST_MIN_LENGTH, \
+        SIMILARITY_THRESHOLD
+    if element is None:
+        return 0
+    if tags and not isinstance(tags, (list, tuple)):
+        logger.error('you must pass tags arg as list or tuple')
+    descendants_tree = defaultdict(list)
+    descendants = descendants_of_body(element)
+    for descendant in descendants:
+        # if one element does not have enough siblings, it can not become a child of candidate element
+        if descendant.number_of_siblings + 1 < LIST_MIN_NUMBER:
+            continue
+        # if min length is larger than specified max length, it can not become a child of candidate element
+        if descendant.a_descendants_group_text_min_length > LIST_MAX_LENGTH:
+            continue
+        # if max length is smaller than specified min length, it can not become a child of candidate element
+        if descendant.a_descendants_group_text_max_length < LIST_MIN_LENGTH:
+            continue
+        # descendant element must have same siblings which their similarity should not below similarity_threshold
+        if descendant.similarity_with_siblings < SIMILARITY_THRESHOLD:
+            continue
+        # filter tag
+        if tags and descendant.tag not in tags:
+            continue
+        descendants_tree[descendant.parent_selector].append(descendant)
+    return len(descendants_tree)
 
 
 def number_of_children(element: Element):
@@ -412,4 +494,4 @@ def similarity_with_siblings(element: Element):
         scores.append(similarity_with_element(element, sibling))
     if not scores:
         return 0
-    return mean(scores)
+    return np.mean(scores)

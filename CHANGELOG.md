@@ -1,5 +1,18 @@
 # Gerapy Auto Extractor Changelog
 
+# 0.1.0 (2020-07-11)
+
+### Bug Fixes
+
+* Fix extraction of title from `h` tag
+
+## Features
+
+* Add support for distinguishing list page between detail page
+* Add test cases for classification
+* Add `content` method support to get html content by file path
+* Move `jsonify` to `helper` module
+
 ## 0.0.4 (2020-07-09)
 
 ### Bug Fixes

@@ -31,7 +31,7 @@ REGEXES = [
     "(\d{1,2}月\d{1,2}日)"
 ]
 
-METAS = [
+METAS_CONTENT = [
     '//meta[starts-with(@property, "rnews:datePublished")]/@content',
     '//meta[starts-with(@property, "article:published_time")]/@content',
     '//meta[starts-with(@property, "og:published_time")]/@content',
@@ -51,4 +51,26 @@ METAS = [
     '//meta[starts-with(@name, "_pubtime")]/@content',
     '//meta[starts-with(@name, "weibo: article:create_at")]/@content',
     '//meta[starts-with(@pubdate, "pubdate")]/@content',
+]
+
+METAS_MATCH = [
+    '//meta[starts-with(@property, "rnews:datePublished")]',
+    '//meta[starts-with(@property, "article:published_time")]',
+    '//meta[starts-with(@property, "og:published_time")]',
+    '//meta[starts-with(@property, "og:release_date")]',
+    '//meta[starts-with(@itemprop, "datePublished")]',
+    '//meta[starts-with(@itemprop, "dateUpdate")]',
+    '//meta[starts-with(@name, "OriginalPublicationDate")]',
+    '//meta[starts-with(@name, "article_date_original")]',
+    '//meta[starts-with(@name, "og:time")]',
+    '//meta[starts-with(@name, "apub:time")]',
+    '//meta[starts-with(@name, "publication_date")]',
+    '//meta[starts-with(@name, "sailthru.date")]',
+    '//meta[starts-with(@name, "PublishDate")]',
+    '//meta[starts-with(@name, "publishdate")]',
+    '//meta[starts-with(@name, "PubDate")]',
+    '//meta[starts-with(@name, "pubtime")]',
+    '//meta[starts-with(@name, "_pubtime")]',
+    '//meta[starts-with(@name, "weibo: article:create_at")]',
+    '//meta[starts-with(@pubdate, "pubdate")]',
 ]

@@ -5,7 +5,7 @@ import numpy as np
 from collections import defaultdict
 from urllib.parse import urljoin
 from gerapy_auto_extractor.utils.cluster import cluster_dict
-from gerapy_auto_extractor.utils.preprocess import preprocess4list
+from gerapy_auto_extractor.utils.preprocess import preprocess4list_extractor
 from gerapy_auto_extractor.extractors.base import BaseExtractor
 from gerapy_auto_extractor.utils.element import descendants_of_body
 from gerapy_auto_extractor.schemas.element import Element
@@ -217,7 +217,7 @@ class ListExtractor(BaseExtractor):
         :return:
         """
         # preprocess
-        preprocess4list(element)
+        preprocess4list_extractor(element)
         
         # build clusters
         clusters = self._build_clusters(element)
