@@ -56,11 +56,11 @@ html = content('samples/detail/sample.html')
 print(jsonify(extract_detail(html)))
 
 html = content('samples/detail/sample.html')
-print(probability_of_detail(html), probability_of_list(html), )
+print(probability_of_detail(html), probability_of_list(html))
 print(is_detail(html), is_list(html))
 
 html = content('samples/list/sample.html')
-print(probability_of_detail(html), probability_of_list(html), )
+print(probability_of_detail(html), probability_of_list(html))
 print(is_detail(html), is_list(html), )
 ```
 
