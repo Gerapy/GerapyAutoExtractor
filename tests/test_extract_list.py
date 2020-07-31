@@ -5,7 +5,8 @@ os.environ['APP_DEBUG'] = 'true'
 import unittest
 from tests.settings import SAMPLES_LIST_DIR
 from tests.test_base import TestBase
-from gerapy_auto_extractor import extract_list, jsonify
+from gerapy_auto_extractor import extract_list
+from gerapy_auto_extractor.helpers import jsonify
 
 
 class TestExtractList(TestBase):

@@ -1,5 +1,11 @@
 # Gerapy Auto Extractor Changelog
 
+## 0.1.1 (2020-07-31)
+
+### Bug Fixes
+
+* Fix bug of get best cluster when extract result is None
+
 ## 0.1.0 (2020-07-11)
 
 ### Bug Fixes

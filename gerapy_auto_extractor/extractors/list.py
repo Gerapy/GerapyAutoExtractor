@@ -169,6 +169,8 @@ class ListExtractor(BaseExtractor):
         :param cluster:
         :return:
         """
+        if not cluster:
+            return None
         # get best tag path of title
         probabilities_of_title = defaultdict(list)
         for element in cluster:
@@ -184,6 +186,8 @@ class ListExtractor(BaseExtractor):
         
         # get most probable tag_path
         probabilities_of_title_avg = {k: np.mean(v) for k, v in probabilities_of_title.items()}
+        if not probabilities_of_title_avg:
+            return None
         best_path = max(probabilities_of_title_avg.items(), key=operator.itemgetter(1))[0]
         logger.log('inspect', f'best tag path {best_path}')
         
