@@ -2,6 +2,7 @@ from gerapy_auto_extractor.extractors.base import BaseExtractor
 from lxml.html import HtmlElement
 from gerapy_auto_extractor.patterns.title import METAS
 from gerapy_auto_extractor.utils.lcs import lcs_of_2
+from gerapy_auto_extractor.utils.similarity import similarity2
 
 
 class TitleExtractor(BaseExtractor):
@@ -28,6 +29,15 @@ class TitleExtractor(BaseExtractor):
         """
         return ''.join(element.xpath('//title//text()')).strip()
     
+    def extract_by_hs(self, element: HtmlElement):
+        """
+        get title from all h1-h3 tag
+        :param element:
+        :return:
+        """
+        hs = element.xpath('//h1//text()|//h2//text()|//h3//text()')
+        return hs or []
+    
     def extract_by_h(self, element: HtmlElement):
         """
         extract by h tag, priority h1, h2, h3
@@ -51,13 +61,19 @@ class TitleExtractor(BaseExtractor):
         """
         title_extracted_by_meta = self.extract_by_meta(element)
         title_extracted_by_h = self.extract_by_h(element)
+        title_extracted_by_hs = self.extract_by_hs(element)
         title_extracted_by_title = self.extract_by_title(element)
         
+        # split logic to add more
         if title_extracted_by_meta:
             return title_extracted_by_meta
         
-        if title_extracted_by_title and title_extracted_by_h:
-            return lcs_of_2(title_extracted_by_title, title_extracted_by_h)
+        # get most similar h
+        title_extracted_by_hs = sorted(title_extracted_by_hs,
+                                       key=lambda x: similarity2(x, title_extracted_by_title),
+                                       reverse=True)
+        if title_extracted_by_hs:
+            return lcs_of_2(title_extracted_by_hs[0], title_extracted_by_title)
         
         if title_extracted_by_title:
             return title_extracted_by_title

@@ -16,11 +16,11 @@ class TestExtractTitle(TestBase):
     samples_dir = SAMPLES_DETAIL_DIR
     
     def test_extract_by_h(self):
-        html = self.html('china_news1.html')
+        html = self.html('ifeng_news1.html')
         element = html2element(html)
-        content = title_extractor.extract_by_h(element)
-        print('Content', content)
-        self.assertEqual(True, False)
+        title = title_extractor.process(element)
+        print('Title', title)
+        self.assertEqual(title, '故宫，你低调点！故宫：不，实力已不允许我继续低调')
 
 
 if __name__ == '__main__':
