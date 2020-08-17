@@ -25,14 +25,15 @@ def cluster(items, threshold=0.9):
     return clusters_map
 
 
-def cluster_dict(data: dict):
+def cluster_dict(data: dict, threshold=0.8):
     """
     cluster dict, convert id key to cluster id key
+    :param threshold:
     :param data:
     :return:
     """
     ids = data.keys()
-    clusters_map = cluster(ids)
+    clusters_map = cluster(ids, threshold)
     result = defaultdict(list)
     for k, v in data.items():
         if isinstance(v, list):
@@ -47,6 +48,8 @@ if __name__ == '__main__':
     data = {
         '/html/body/div[@class="main"]/div[1]/ul': ['child1', 'child2', 'child3'],
         '/html/body/div[@class="main"]/div[2]/ul': ['child4', 'child5', 'child6'],
-        '/html/body/header/ul': ['child7', 'child8', 'child9'],
+        '/html/body/div[@class="main"]/div[3]/ul': ['child7', 'child8', 'child9'],
+        '/html/body/header/div[1]': ['child10', 'child11', 'child12'],
+        '/html/body/header/div[2]': ['child13', 'child14', 'child15'],
     }
-    print(cluster_dict(data))
+    print(cluster_dict(data, threshold=0.7))
