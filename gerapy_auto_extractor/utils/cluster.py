@@ -41,3 +41,12 @@ def cluster_dict(data: dict):
         else:
             result[clusters_map[k]].append(v)
     return dict(result)
+
+
+if __name__ == '__main__':
+    data = {
+        '/html/body/div[@class="main"]/div[1]/ul': ['child1', 'child2', 'child3'],
+        '/html/body/div[@class="main"]/div[2]/ul': ['child4', 'child5', 'child6'],
+        '/html/body/header/ul': ['child7', 'child8', 'child9'],
+    }
+    print(cluster_dict(data))
