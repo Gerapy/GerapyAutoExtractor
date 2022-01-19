@@ -27,7 +27,7 @@ def similarity2(s1, s2):
     s1_set = set(list(s1))
     s2_set = set(list(s2))
     intersection = s1_set.intersection(s2_set)
-    union = s2_set.intersection(s2_set)
+    union = s1_set.intersection(s2_set)
     return len(intersection) / len(union)
 
 
