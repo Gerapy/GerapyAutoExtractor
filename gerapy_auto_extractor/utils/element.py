@@ -278,6 +278,37 @@ def text(element: Element):
     return text
 
 
+def text_len(element: Element, xpath):
+    '''
+    文本长度计算，该算法使用场景：中文网页 & 中文网页包含英文段落；
+    如果text包含英文，则按照“单词数量”计数，而非“字符数量”计数，进而修正“文本密度”指标；
+    如果英文字符数量 / len(text) > 0.5，则默认该文本以英文为主，按照“单词数量”计算。（其中0.5为经验值）；
+    :param element:
+    :param xpath:
+    :return:
+    '''
+    result = 0
+    if element is None:
+        return 0
+    texts = element.xpath(xpath)
+    word_pattern = re.compile(r'[A-Za-z0-9_-]+\b')
+    for text in texts:
+        if text is None: continue
+        # 1.判断语言类型
+        english_words = re.findall(word_pattern, text)
+        english_words_len = len(''.join(english_words).strip())
+        text_len = len(text)
+        words_rate = english_words_len / text_len
+        # 2.按语言类型计算长度
+        text = re.sub(r'\s*', '', text, flags=re.S)
+        if words_rate > 0.5:
+            real_text_len = len(text) - english_words_len + len(english_words)
+        else:
+            real_text_len = len(text)
+        result += real_text_len
+    return result
+
+
 def number_of_char(element: Element):
     """
     get number of char, for example, result of `<a href="#">hello</a>world` = 10
@@ -286,7 +317,7 @@ def number_of_char(element: Element):
     """
     if element is None:
         return 0
-    return len(text(element))
+    return text_len(element, './/text()')
 
 
 def number_of_a_char(element: Element):
@@ -297,9 +328,7 @@ def number_of_a_char(element: Element):
     """
     if element is None:
         return 0
-    text = ''.join(element.xpath('.//a//text()'))
-    text = re.sub(r'\s*', '', text, flags=re.S)
-    return len(text)
+    return text_len(element, './/a//text()')
 
 
 def number_of_a_char_log10(element: Element):
